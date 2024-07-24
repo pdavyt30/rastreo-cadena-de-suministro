@@ -1,0 +1,21 @@
+.simulacion-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.stop-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    width: auto;
+    display: inline-block;
+}
+
+.stop-button:hover {
+    background-color: #c9302c;
+}

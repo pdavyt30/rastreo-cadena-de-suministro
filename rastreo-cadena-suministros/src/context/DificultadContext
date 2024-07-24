@@ -1,0 +1,15 @@
+import React, { createContext, useState } from 'react';
+
+const DificultadContext = createContext();
+
+export const DificultadProvider = ({ children }) => {
+    const [dificultad, setDificultad] = useState('principiante');
+
+    return (
+        <DificultadContext.Provider value={{ dificultad, setDificultad }}>
+            {children}
+        </DificultadContext.Provider>
+    );
+};
+
+export default DificultadContext;
