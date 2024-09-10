@@ -19,10 +19,14 @@ label {
     color: #555;
 }
 
+.input-container {
+    position: relative;
+}
+
 input[type="text"],
 input[type="number"] {
-    width: calc(100% - 22px);
-    padding: 10px;
+    width: 100%; /* Ajustar el tamaño para todo el contenedor */
+    padding: 10px 40px 10px 10px; /* Agregar espacio para el ícono */
     margin-top: 5px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
@@ -43,4 +47,53 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+.info-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    background-color: hsl(212, 29%, 60%);
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.tooltip {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 125%; /* Posicionar el tooltip por encima del ícono */
+    width: 120px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.info-icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Cambiar el color del placeholder */
+input::placeholder {
+    color: #b0b0b0; /* Color gris más claro */
+    opacity: 1; /* Para asegurar que el color se vea correctamente */
+}
+
+/* Para navegadores más antiguos (compatibilidad) */
+input:-ms-input-placeholder {
+    color: #b0b0b0;
+}
+
+input::-ms-input-placeholder {
+    color: #b0b0b0;
 }
