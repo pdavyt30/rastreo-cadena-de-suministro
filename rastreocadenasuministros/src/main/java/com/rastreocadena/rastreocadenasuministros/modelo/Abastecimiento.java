@@ -1,36 +1,52 @@
 package com.rastreocadena.rastreocadenasuministros.modelo;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-public class Abastecimiento extends Etapa {
-    private int tiempoProduccion;
-    private int capacidad;
-    private int periodoExpedicion;
+public class Abastecimiento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private int capacidadMaximaAbastecimiento;
+    private int periodoExpedicionAbastecimiento;
+    private int tiempoProduccionAbastecimiento;
 
     // Getters y Setters
 
-    public int getTiempoProduccion() {
-        return tiempoProduccion;
+    public Long getId() {
+        return id;
     }
 
-    public void setTiempoProduccion(int tiempoProduccion) {
-        this.tiempoProduccion = tiempoProduccion;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public int getCapacidad() {
-        return capacidad;
+    public int getCapacidadMaximaAbastecimiento() {
+        return capacidadMaximaAbastecimiento;
     }
 
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
+    public void setCapacidadMaximaAbastecimiento(int capacidadMaximaAbastecimiento) {
+        this.capacidadMaximaAbastecimiento = capacidadMaximaAbastecimiento;
     }
 
-    public int getPeriodoExpedicion() {
-        return periodoExpedicion;
+    public int getPeriodoExpedicionAbastecimiento() {
+        return periodoExpedicionAbastecimiento;
     }
 
-    public void setPeriodoExpedicion(int periodoExpedicion) {
-        this.periodoExpedicion = periodoExpedicion;
+    public void setPeriodoExpedicionAbastecimiento(int periodoExpedicionAbastecimiento) {
+        this.periodoExpedicionAbastecimiento = periodoExpedicionAbastecimiento;
+    }
+
+    public int getTiempoProduccionAbastecimiento() {
+        return tiempoProduccionAbastecimiento;
+    }
+
+    public void setTiempoProduccionAbastecimiento(int tiempoProduccionAbastecimiento) {
+        this.tiempoProduccionAbastecimiento = tiempoProduccionAbastecimiento;
     }
 }
