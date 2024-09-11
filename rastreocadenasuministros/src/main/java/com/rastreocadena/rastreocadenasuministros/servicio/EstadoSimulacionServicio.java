@@ -292,7 +292,6 @@ public class EstadoSimulacionServicio {
             estadoSimulacion.setProductosVendidos(0);
             estadoSimulacion.setUnidadesAbastecimientoDesechadas(0);
             estadoSimulacion.setProductosDesechados(0);
-
         }
     }
 }
