@@ -70,7 +70,8 @@
     margin: 2px;
 }
 
-.stop-button {
+.stop-button, 
+.report-button {
     background-color: #d9534f;
     color: white;
     border: none;
@@ -83,7 +84,8 @@
     display: inline-block;
 }
 
-.stop-button:hover {
+.stop-button:hover
+.report-button:hover {
     background-color: #c9302c;
 }
 
@@ -92,4 +94,12 @@
     font-weight: bold;
     text-align: center;
     margin-top: 10px;
+}
+
+.report-button {
+    background-color: #007bff;
+}
+
+.report-button:hover {
+    background-color: #0056b3;
 }

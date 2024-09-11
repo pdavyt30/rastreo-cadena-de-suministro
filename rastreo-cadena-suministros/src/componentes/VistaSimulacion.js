@@ -40,6 +40,28 @@ const VistaSimulacion = () => {
         }
     };
 
+    const generarReporte = async () => {
+        try {
+            const response = await axios({
+                url: 'http://localhost:8080/api/simulacion/reporte',
+                method: 'GET',
+                responseType: 'blob', // Forzar la descarga del archivo
+            });
+
+            // Crear un enlace temporal para descargar el archivo
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'reporte_simulacion.txt');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Error generando el reporte', error);
+            alert('Error generando el reporte');
+        }
+    };
+
     return (
         <div className="simulacion-container">
             <h1 className="titulo">Simulación en Ejecución</h1>
@@ -97,9 +119,15 @@ const VistaSimulacion = () => {
                     {alertaAlmacenamiento && <div className="alerta">{alertaAlmacenamiento}</div>}
                 </div>
             </div>
-            <button className="stop-button" onClick={detenerSimulacion}>
-                Detener Simulación
-            </button>
+
+            <div className="button-container">
+                <button className="stop-button" onClick={detenerSimulacion}>
+                    Detener Simulación
+                </button>
+                <button className="report-button" onClick={generarReporte}>
+                    Generar Reporte
+                </button>
+            </div>
         </div>
     );
 };

@@ -16,8 +16,13 @@ public class EstadoSimulacion {
     private String alertaAbastecimiento;
     private String alertaProduccion;
     private String alertaAlmacenamiento;
-    private int tiempoTransicionAbastecimientoAProduccion;
-    private int tiempoTransicionProduccionAAlmacenamiento;
+    private int unidadesAbastecimientoGeneradas;
+    private int productosGenerados;
+
+    private int productosVendidos;
+    private int unidadesAbastecimientoDesechadas;
+    private int productosDesechados;
+
 
     // Constructor por defecto
     public EstadoSimulacion() {
@@ -29,6 +34,14 @@ public class EstadoSimulacion {
     }
 
     // Getters y Setters
+
+    public void setUnidadesAbastecimientoAba(int unidadesAbastecimientoAba) {
+        this.unidadesAbastecimientoAba = unidadesAbastecimientoAba;
+    }
+
+    public void setUnidadesAbastecimientoProd(int unidadesAbastecimientoProd) {
+        this.unidadesAbastecimientoProd = unidadesAbastecimientoProd;
+    }
 
     public boolean isEnEjecucion() {
         return enEjecucion;
@@ -118,22 +131,6 @@ public class EstadoSimulacion {
         this.alertaAbastecimiento = alertaAbastecimiento;
     }
 
-    public int getTiempoTransicionAbastecimientoAProduccion() {
-        return tiempoTransicionAbastecimientoAProduccion;
-    }
-
-    public void setTiempoTransicionAbastecimientoAProduccion(int tiempoTransicionAbastecimientoAProduccion) {
-        this.tiempoTransicionAbastecimientoAProduccion = tiempoTransicionAbastecimientoAProduccion;
-    }
-
-    public int getTiempoTransicionProduccionAAlmacenamiento() {
-        return tiempoTransicionProduccionAAlmacenamiento;
-    }
-
-    public void setTiempoTransicionProduccionAAlmacenamiento(int tiempoTransicionProduccionAAlmacenamiento) {
-        this.tiempoTransicionProduccionAAlmacenamiento = tiempoTransicionProduccionAAlmacenamiento;
-    }
-
     public int getUnidadesEnTransicion() {
         return unidadesEnTransicion;
     }
@@ -149,6 +146,75 @@ public class EstadoSimulacion {
     public void setProductosEnTransicion(int productosEnTransicion) {
         this.productosEnTransicion = productosEnTransicion;
     }
+
+    public void incrementarUnidadesAbastecimientoGeneradas() {
+        this.unidadesAbastecimientoGeneradas++;
+    }
+
+    public int getUnidadesAbastecimientoGeneradas() {
+        return this.unidadesAbastecimientoGeneradas;
+    }
+
+    public void incrementarProductosGenerados() {
+        this.productosGenerados++;
+    }
+
+    public int getProductosGenerados() {
+        return this.productosGenerados;
+    }
+
+    public void incrementarProductosVendidos() {
+        this.productosVendidos++;
+    }
+
+    public int getProductosVendidos() {
+        return this.productosVendidos;
+    }
+
+    public void incrementarUnidadesAbastecimientoDesechadas() {
+        this.unidadesAbastecimientoDesechadas++;
+    }
+
+    public void incrementarUnidadesAbastecimientoDesechadas(int cantidad) {
+        this.unidadesAbastecimientoDesechadas+= cantidad;
+    }
+
+    public int getUnidadesAbastecimientoDesechadas() {
+        return this.unidadesAbastecimientoDesechadas;
+    }
+
+    public void incrementarProductosDesechados() {
+        this.productosDesechados++;
+    }
+
+    public void incrementarProductosDesechados(int cantidad) {
+        this.productosDesechados+= cantidad;
+    }
+
+    public int getProductosDesechados() {
+        return this.productosDesechados;
+    }
+
+    public void setUnidadesAbastecimientoGeneradas(int unidadesAbastecimientoGeneradas) {
+        this.unidadesAbastecimientoGeneradas = unidadesAbastecimientoGeneradas;
+    }
+
+    public void setProductosGenerados(int productosGenerados) {
+        this.productosGenerados = productosGenerados;
+    }
+
+    public void setProductosVendidos(int productosVendidos) {
+        this.productosVendidos = productosVendidos;
+    }
+
+    public void setUnidadesAbastecimientoDesechadas(int unidadesAbastecimientoDesechadas) {
+        this.unidadesAbastecimientoDesechadas = unidadesAbastecimientoDesechadas;
+    }
+
+    public void setProductosDesechados(int productosDesechados) {
+        this.productosDesechados = productosDesechados;
+    }
+
 
     // Métodos adicionales
 
@@ -208,7 +274,7 @@ public class EstadoSimulacion {
      *                 Si hay suficientes unidades de abastecimiento disponibles, estas se reducen en la cantidad especificada
      *                 y se incrementa en una unidad el número de productos producidos.
      */
-    public void producirUnidades(int cantidad) {
+    public void producirProductos(int cantidad) {
         if (this.unidadesAbastecimientoProd >= cantidad) {
             this.unidadesAbastecimientoProd -= cantidad;
             this.unidadesProductosProd += 1;

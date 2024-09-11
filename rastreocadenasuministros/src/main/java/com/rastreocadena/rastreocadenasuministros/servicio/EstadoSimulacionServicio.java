@@ -112,9 +112,9 @@ public class EstadoSimulacionServicio {
                         estadoSimulacion.incrementarUnidadesDeAbastecimientoEnTransicion(unidadesParaTransicion);
                         estadoSimulacion.expedirUnidadesAbastecimiento();
                         estadoSimulacion.setAlertaProduccion("Unidades a: " + tiempoReal + " minutos de llegar");
-                        estadoSimulacion.setAlertaAbastecimiento(null); // Limpiar la alerta tras la expedición
+                        estadoSimulacion.setAlertaAbastecimiento(null);
 
-                        // Reiniciar el contador
+                        // Reiniciar el contador luego de la expedición
                         contadorExpedicionAbastecimiento.set(0);
                     } finally {
                         lockTransicionAbastecimientoProduccion.unlock();
@@ -126,9 +126,11 @@ public class EstadoSimulacionServicio {
                 // Luego, intentamos incrementar si es que hay espacio disponible
                 if (estadoSimulacion.getUnidadesAbastecimientoAba() < capacidadMaximaAbastecimiento) {
                     estadoSimulacion.incrementarUnidadesDeAbastecimientoEnAbastecimiento();
+                    estadoSimulacion.incrementarUnidadesAbastecimientoGeneradas();
                     estadoSimulacion.setAlertaAbastecimiento(null);
                 } else {
                     estadoSimulacion.setAlertaAbastecimiento("Capacidad máxima alcanzada en Abastecimiento");
+                    estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas();
                 }
             } finally {
                 lockAbastecimiento.unlock();
@@ -152,6 +154,7 @@ public class EstadoSimulacionServicio {
                         int unidadesDesechadas = unidadesParaProduccion - espacioDisponibleProduccion;
                         estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(espacioDisponibleProduccion);
                         estadoSimulacion.setAlertaProduccion("Unidades recibidas: " + espacioDisponibleProduccion + " - Unidades desechadas: " + unidadesDesechadas);
+                        estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas(unidadesDesechadas);
                     }
                     estadoSimulacion.expedirUnidadesTransicionAbastecimiento();
                 } finally {
@@ -202,9 +205,11 @@ public class EstadoSimulacionServicio {
                 } else if (faltaUnidades) {
                     estadoSimulacion.setAlertaProduccion("No hay suficientes unidades de abastecimiento para producir.");
                 } else if (produccionLlena) {
-                    estadoSimulacion.setAlertaProduccion("Capacidad de producción alcanzada.");
+                    estadoSimulacion.setAlertaProduccion("Capacidad máxima de producción alcanzada.");
+                    estadoSimulacion.incrementarProductosDesechados();
                 } else {
-                    estadoSimulacion.producirUnidades(unidadesPorProducto);
+                    estadoSimulacion.producirProductos(unidadesPorProducto);
+                    estadoSimulacion.incrementarProductosGenerados();
                     estadoSimulacion.setAlertaProduccion(null);
                 }
             } finally {
@@ -224,6 +229,8 @@ public class EstadoSimulacionServicio {
                         estadoSimulacion.transferirProductosAAlmacenamiento(unidadesParaAlmacenamiento);
                         estadoSimulacion.setAlertaAlmacenamiento(null);
                     } else {
+                        int productosDesechadosCantidad = unidadesParaAlmacenamiento - espacioDisponibleAlmacenamiento;
+                        estadoSimulacion.incrementarProductosDesechados(productosDesechadosCantidad);
                         estadoSimulacion.transferirProductosAAlmacenamiento(espacioDisponibleAlmacenamiento);
                         estadoSimulacion.setAlertaAlmacenamiento("Capacidad máxima en Almacenamiento alcanzada, productos excedentes desechados");
                     }
@@ -242,6 +249,7 @@ public class EstadoSimulacionServicio {
             try {
                 if (estadoSimulacion.getUnidadesProductosAlma() > 0) {
                     estadoSimulacion.venderProducto();
+                    estadoSimulacion.incrementarProductosVendidos();
                     estadoSimulacion.setAlertaAlmacenamiento(null);
                 } else {
                     estadoSimulacion.setAlertaAlmacenamiento("No hay productos disponibles para la compra.");
@@ -278,6 +286,13 @@ public class EstadoSimulacionServicio {
             estadoSimulacion.setAlertaAlmacenamiento(null);
             estadoSimulacion.setAlertaAbastecimiento(null);
             estadoSimulacion.setAlertaProduccion(null);
+
+            estadoSimulacion.setUnidadesAbastecimientoGeneradas(0);
+            estadoSimulacion.setProductosGenerados(0);
+            estadoSimulacion.setProductosVendidos(0);
+            estadoSimulacion.setUnidadesAbastecimientoDesechadas(0);
+            estadoSimulacion.setProductosDesechados(0);
+
         }
     }
 }
