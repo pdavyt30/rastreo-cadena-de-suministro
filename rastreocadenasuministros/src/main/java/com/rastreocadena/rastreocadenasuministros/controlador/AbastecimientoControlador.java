@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/abastecimiento")
-@CrossOrigin(origins = "http://localhost:3000") // Puedes usar esto si prefieres especificar CORS por controlador
+@CrossOrigin(origins = "http://localhost:3000")
 public class AbastecimientoControlador {
 
     @Autowired

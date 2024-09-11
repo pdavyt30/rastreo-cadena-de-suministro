@@ -1,70 +1,183 @@
-.container {
-    text-align: center;
+/* Contenedor principal de la simulación */
+.simulacion-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 50px;
 }
 
-.button-container {
+.container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.stage-button {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
-    flex: 1 0 30%;
-    max-width: 200px;
     text-align: center;
+    margin-top: 20px;
+    width: 100%;
 }
 
-.stage-button:hover {
-    background-color: #e0e0e0;
-}
-
-.start-stop-container {
+/* Estilo del título de la simulación */
+.titulo {
+    text-align: center;
+    width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center; /* Asegura que el texto esté centrado verticalmente */
+    margin-bottom: 20px; /* Puedes ajustar el margen inferior si es necesario */
+}
+
+/* Contenedor de las etapas de la simulación */
+.etapa-container {
+    display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
     margin-top: 20px;
 }
 
-.start-button, .stop-button {
+/* Línea que conecta las etapas */
+.linea {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-top: 2px solid black;
+    z-index: -1;
+}
+
+/* Estilo de cada etapa */
+.etapa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #000;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    height: 200px;
+    position: relative;
+    background-color: white;
+}
+
+/* Contenedor del contenido dentro de cada etapa */
+.contenido-etapa {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    flex-grow: 1;
+}
+
+/* Estilo de las unidades de abastecimiento */
+.unidad-abastecimiento {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    margin: 2px;
+}
+
+/* Estilo de las unidades de producción */
+.unidad-produccion {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    margin: 2px;
+}
+
+/* Estilo del botón para detener la simulación */
+.stop-button {
+    background-color: #d9534f;
     color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 20px;
     width: auto;
     display: inline-block;
 }
 
-.start-button {
-    background-color: #4CAF50;
+.stop-button:hover {
+    background-color: #c9302c;
 }
 
-.start-button:hover:not(:disabled) {
+/* Estilo de la alerta que aparece en las etapas */
+.alerta {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Contenedor de los botones de configuración y acciones */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+/* Estilo de los botones de configuración de etapas */
+.stage-button {
+    background-color: #e0e0e0; /* Gris */
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: auto;
+    margin: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.stage-button:hover {
+    background-color: #d0d0d0;
+}
+
+/* Estilo de los botones para iniciar la simulación o borrar datos */
+.start-button {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px; /* Ajustado para que sea menos ancho */
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+    width: auto;
+}
+
+.start-button:hover {
     background-color: #45a049;
 }
 
-.start-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.delete-button {
+    background-color: #d9534f; /* Rojo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px; /* Ajustado para que sea menos ancho */
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+    width: auto;
 }
 
-.stop-button {
-    background-color: #d9534f;
-}
-
-.stop-button:hover {
+.delete-button:hover {
     background-color: #c9302c;
+}
+
+/* Alinear botones de inicio y borrar datos en la misma fila */
+.start-stop-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: nowrap;
 }
