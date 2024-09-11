@@ -286,7 +286,6 @@ public class EstadoSimulacionServicio {
             estadoSimulacion.setAlertaAlmacenamiento(null);
             estadoSimulacion.setAlertaAbastecimiento(null);
             estadoSimulacion.setAlertaProduccion(null);
-
             estadoSimulacion.setUnidadesAbastecimientoGeneradas(0);
             estadoSimulacion.setProductosGenerados(0);
             estadoSimulacion.setProductosVendidos(0);
