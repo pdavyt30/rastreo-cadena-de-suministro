@@ -12,12 +12,15 @@ const FormularioEtapa = () => {
         nombre: '',
         tipo: tipo,
         tiempoProduccionAbastecimiento: '',
-        tiempoFabricacionProducto: '',
+        tiempoProduccionAbastecimiento2: '',
         capacidadMaximaAbastecimiento: '',
+        capacidadMaximaAbastecimiento2: '',
+        periodoExpedicionAbastecimiento: '',
+        periodoExpedicionAbastecimiento2: '',
+        tiempoFabricacionProducto: '',
         capacidadMaximaAbastecimientoProduccion: '', 
         capacidadMaximaProductosProduccion: '', 
         capacidadMaximaProductosAlmacenamiento: '', 
-        periodoExpedicionAbastecimiento: '', 
         periodoExpedicionProduccion: '', 
         unidadesPorProducto: '',
         periodoCompras: ''
@@ -49,6 +52,11 @@ const FormularioEtapa = () => {
             return;
         }
 
+        if (tipo === 'abastecimiento2' && Number(etapaData.periodoExpedicionAbastecimiento2) < Number(etapaData.tiempoProduccionAbastecimiento2)) {
+            alert('El periodo de expedición no puede ser menor que el tiempo de producción en Abastecimiento 2.');
+            return;
+        }
+
         if (tipo === 'produccion' && Number(etapaData.periodoExpedicionProduccion) < Number(etapaData.tiempoFabricacionProducto)) {
             alert('El periodo de expedición no puede ser menor que el tiempo de producción en Producción.');
             return;
@@ -67,14 +75,15 @@ const FormularioEtapa = () => {
     const renderFields = () => {
         switch (tipo) {
             case 'abastecimiento':
+            case 'abastecimiento2': // Usamos el mismo formulario para abastecimiento y abastecimiento2
                 return (
                     <>
                         <label>
                             Tiempo de Producción (minutos):
                             <input
                                 type="number"
-                                name="tiempoProduccionAbastecimiento"
-                                value={etapaData.tiempoProduccionAbastecimiento || ''}
+                                name={tipo === 'abastecimiento' ? 'tiempoProduccionAbastecimiento' : 'tiempoProduccionAbastecimiento2'}
+                                value={tipo === 'abastecimiento' ? etapaData.tiempoProduccionAbastecimiento : etapaData.tiempoProduccionAbastecimiento2}
                                 onChange={handleChange}
                                 placeholder="Ej: 5 minutos"
                                 required
@@ -85,8 +94,8 @@ const FormularioEtapa = () => {
                             <div className="input-container">
                                 <input
                                     type="number"
-                                    name="capacidadMaximaAbastecimiento"
-                                    value={etapaData.capacidadMaximaAbastecimiento || ''}
+                                    name={tipo === 'abastecimiento' ? 'capacidadMaximaAbastecimiento' : 'capacidadMaximaAbastecimiento2'}
+                                    value={tipo === 'abastecimiento' ? etapaData.capacidadMaximaAbastecimiento : etapaData.capacidadMaximaAbastecimiento2}
                                     onChange={handleChange}
                                     required
                                 />
@@ -99,8 +108,8 @@ const FormularioEtapa = () => {
                             Periodo entre Tandas de Expedición (minutos):
                             <input
                                 type="number"
-                                name="periodoExpedicionAbastecimiento"
-                                value={etapaData.periodoExpedicionAbastecimiento || ''}
+                                name={tipo === 'abastecimiento' ? 'periodoExpedicionAbastecimiento' : 'periodoExpedicionAbastecimiento2'}
+                                value={tipo === 'abastecimiento' ? etapaData.periodoExpedicionAbastecimiento : etapaData.periodoExpedicionAbastecimiento2}
                                 onChange={handleChange}
                                 placeholder="Ej: 10 minutos"
                                 required

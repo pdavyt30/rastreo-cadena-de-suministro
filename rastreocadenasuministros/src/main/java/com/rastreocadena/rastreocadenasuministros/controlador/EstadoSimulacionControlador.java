@@ -8,13 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-
 import java.util.Map;
 
 @RestController
@@ -26,8 +22,9 @@ public class EstadoSimulacionControlador {
     private EstadoSimulacionServicio estadoSimulacionServicio;
 
     @PostMapping("/iniciar")
-    public ResponseEntity<EstadoSimulacion> iniciarSimulacion(@RequestBody Map<String, Object> etapas) {
-        EstadoSimulacion estadoSimulacion = estadoSimulacionServicio.iniciarSimulacion(etapas);
+    public ResponseEntity<EstadoSimulacion> iniciarSimulacion(@RequestBody Map<String, Object> simulacionData) {
+        String dificultad = (String) simulacionData.get("dificultad");
+        EstadoSimulacion estadoSimulacion = estadoSimulacionServicio.iniciarSimulacion(simulacionData, dificultad);
         return ResponseEntity.ok(estadoSimulacion);
     }
 

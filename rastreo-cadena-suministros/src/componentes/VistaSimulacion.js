@@ -9,8 +9,14 @@ const VistaSimulacion = () => {
     const [alertaAbastecimiento, setAlertaAbastecimiento] = useState('');
     const [alertaProduccion, setAlertaProduccion] = useState('');
     const [alertaAlmacenamiento, setAlertaAlmacenamiento] = useState('');
+    const [alertaAbastecimiento2, setAlertaAbastecimiento2] = useState(''); // Alerta para Abastecimiento 2
+    const [dificultad, setDificultad] = useState('principiante'); // Dificultad
 
     useEffect(() => {
+        // Obtener la dificultad desde localStorage
+        const dificultadAlmacenada = localStorage.getItem('dificultad') || 'principiante';
+        setDificultad(dificultadAlmacenada);
+
         const fetchEstado = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/api/simulacion/estado');
@@ -18,7 +24,9 @@ const VistaSimulacion = () => {
                 setAlertaAbastecimiento(response.data.alertaAbastecimiento || '');
                 setAlertaProduccion(response.data.alertaProduccion || '');
                 setAlertaAlmacenamiento(response.data.alertaAlmacenamiento || '');
-
+                if (dificultadAlmacenada === 'avanzado') {
+                    setAlertaAbastecimiento2(response.data.alertaAbastecimiento2 || '');
+                }
             } catch (error) {
                 console.error('Error fetching estado de la simulación', error);
             }
@@ -45,10 +53,9 @@ const VistaSimulacion = () => {
             const response = await axios({
                 url: 'http://localhost:8080/api/simulacion/reporte',
                 method: 'GET',
-                responseType: 'blob', // Forzar la descarga del archivo
+                responseType: 'blob',
             });
 
-            // Crear un enlace temporal para descargar el archivo
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -76,9 +83,34 @@ const VistaSimulacion = () => {
                     {alertaAbastecimiento && <div className="alerta">{alertaAbastecimiento}</div>}
                 </div>
 
+                {/* Condicional: Mostrar Abastecimiento 2 si la dificultad es avanzado */}
+                {dificultad === 'avanzado' && (
+                    <>
+                        <div className="etapa">
+                            <h2>Abastecimiento 2 ({estado.unidadesAbastecimiento2 || 0})</h2>
+                            <div className="contenido-etapa">
+                                {Array.from({ length: estado.unidadesAbastecimiento2 || 0 }).map((_, idx) => (
+                                    <div key={idx} className="unidad-abastecimiento"></div>
+                                ))}
+                            </div>
+                            {alertaAbastecimiento2 && <div className="alerta">{alertaAbastecimiento2}</div>}
+                        </div>
+
+                        {/* Transición Abastecimiento 2 -> Producción */}
+                        <div className="transicion">
+                            <h3>Transición (Abastecimiento 2 - Producción)</h3>
+                            <div className="contenido-transicion">
+                                {Array.from({ length: estado.unidadesEnTransicion2 || 0 }).map((_, idx) => (
+                                    <div key={idx} className="unidad-abastecimiento"></div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                )}
+
                 {/* Transición Abastecimiento -> Producción */}
                 <div className="transicion">
-                    <h3>Transición</h3>
+                    <h3>Transición (Abastecimiento - Producción)</h3>
                     <div className="contenido-transicion">
                         {Array.from({ length: estado.unidadesEnTransicion || 0 }).map((_, idx) => (
                             <div key={idx} className="unidad-abastecimiento"></div>
@@ -101,7 +133,7 @@ const VistaSimulacion = () => {
 
                 {/* Transición Producción -> Almacenamiento */}
                 <div className="transicion">
-                    <h3>Transición</h3>
+                    <h3>Transición (Producción - Almacenamiento)</h3>
                     <div className="contenido-transicion">
                         {Array.from({ length: estado.productosEnTransicion || 0 }).map((_, idx) => (
                             <div key={idx} className="unidad-produccion"></div>

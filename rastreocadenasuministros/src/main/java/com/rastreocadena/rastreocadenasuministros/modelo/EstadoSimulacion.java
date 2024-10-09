@@ -5,9 +5,12 @@ import java.util.Map;
 public class EstadoSimulacion {
     private boolean enEjecucion;
     private Map<String, Object> abastecimientoCondiciones;
+    private Map<String, Object> abastecimiento2Condiciones;
     private Map<String, Object> produccionCondiciones;
     private Map<String, Object> almacenamientoCondiciones;
     private int unidadesAbastecimientoAba = 0;
+
+    private int unidadesAbastecimientoAba2 = 0;
     private int unidadesAbastecimientoProd = 0;
     private int unidadesProductosProd = 0;
     private int unidadesProductosAlma = 0;
@@ -330,4 +333,30 @@ public class EstadoSimulacion {
             this.unidadesProductosAlma--;
         }
     }
+
+    // Abastecimiento 2
+    // Setter para condiciones de abastecimiento 2
+    public void setAbastecimiento2Condiciones(Map<String, Object> abastecimiento2Condiciones) {
+        this.abastecimiento2Condiciones = abastecimiento2Condiciones;
+    }
+
+    // Método para obtener unidades de abastecimiento 2
+    public int getUnidadesAbastecimientoAba2() {
+        return this.unidadesAbastecimientoAba2;
+    }
+
+    public void setUnidadesAbastecimientoAba2(int unidadesAbastecimientoAba2) {
+        this.unidadesAbastecimientoAba2 = unidadesAbastecimientoAba2;
+    }
+
+    // Método para expedir unidades de abastecimiento 2
+    public void expedirUnidadesAbastecimiento2() {
+        this.unidadesAbastecimientoAba2 = 0;  // Las unidades expedidas se vacían
+    }
+
+    // Método para incrementar unidades en abastecimiento 2
+    public void incrementarUnidadesDeAbastecimientoEnAbastecimiento2() {
+        this.unidadesAbastecimientoAba2++;
+    }
+
 }

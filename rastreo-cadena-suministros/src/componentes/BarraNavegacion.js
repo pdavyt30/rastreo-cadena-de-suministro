@@ -4,7 +4,10 @@ import './BarraNavegacion.css';
 
 const BarraNavegacion = ({ setDificultad }) => {
     const handleSelectChange = (e) => {
-        setDificultad(e.target.value);
+        const selectedDifficulty = e.target.value;
+        setDificultad(selectedDifficulty);
+        // Almacenar dificultad en localStorage
+        localStorage.setItem('dificultad', selectedDifficulty);
     };
 
     return (

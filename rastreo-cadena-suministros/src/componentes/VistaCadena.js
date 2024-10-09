@@ -9,6 +9,7 @@ const VistaCadena = ({ dificultad }) => {
     abastecimiento: null,
     produccion: null,
     almacenamiento: null,
+    abastecimiento2: null // Agregamos abastecimiento2
   });
   const [enEjecucion, setEnEjecucion] = useState(false);
 
@@ -25,6 +26,7 @@ const VistaCadena = ({ dificultad }) => {
           abastecimiento: abastecimiento.data[0] || null,
           produccion: produccion.data[0] || null,
           almacenamiento: almacenamiento.data[0] || null,
+          abastecimiento2: dificultad === "avanzado" ? abastecimiento.data[1] || null : null // Obtenemos la segunda etapa si la dificultad es avanzado
         });
         setEnEjecucion(estadoSimulacion.data.enEjecucion);
       } catch (error) {
@@ -32,10 +34,10 @@ const VistaCadena = ({ dificultad }) => {
       }
     };
     fetchEtapas();
-  }, []);
+  }, [dificultad]); // El hook se activa cuando la dificultad cambia
 
   const handleButtonClick = (tipo) => {
-    if (dificultad === "principiante" && etapas[tipo]) {
+    if (etapas[tipo]) {
       navigate("/configurar-etapa", { state: { tipo, etapa: etapas[tipo] } });
     } else {
       navigate("/configurar-etapa", { state: { tipo } });
@@ -43,12 +45,14 @@ const VistaCadena = ({ dificultad }) => {
   };
 
   const iniciarSimulacion = async () => {
+    const dificultad = localStorage.getItem("dificultad");
+    const simulacionData = { ...etapas, dificultad };
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/simulacion/iniciar",
-        etapas
+        simulacionData
       );
-      console.log(response.data)
       alert("Simulación iniciada");
       setEnEjecucion(true);
       navigate("/simulacion");
@@ -60,9 +64,7 @@ const VistaCadena = ({ dificultad }) => {
 
   const detenerSimulacion = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/simulacion/detener"
-      );
+      await axios.post("http://localhost:8080/api/simulacion/detener");
       alert("Simulación detenida");
       setEnEjecucion(false);
       navigate("/");
@@ -84,6 +86,7 @@ const VistaCadena = ({ dificultad }) => {
         abastecimiento: null,
         produccion: null,
         almacenamiento: null,
+        abastecimiento2: null
       });
     } catch (error) {
       console.error("Error borrando los datos", error);
@@ -100,10 +103,20 @@ const VistaCadena = ({ dificultad }) => {
           onClick={() => handleButtonClick("abastecimiento")}
           disabled={enEjecucion}
         >
-          {etapas.abastecimiento
-            ? "Editar Abastecimiento"
-            : "Configurar Abastecimiento"}
+          {etapas.abastecimiento ? "Editar Abastecimiento" : "Configurar Abastecimiento"}
         </button>
+
+        {/* Mostrar el botón de Abastecimiento 2 si la dificultad es avanzado */}
+        {dificultad === "avanzado" && (
+          <button
+            className="stage-button"
+            onClick={() => handleButtonClick("abastecimiento2")}
+            disabled={enEjecucion}
+          >
+            {etapas.abastecimiento2 ? "Editar Abastecimiento 2" : "Configurar Abastecimiento 2"}
+          </button>
+        )}
+
         <button
           className="stage-button"
           onClick={() => handleButtonClick("produccion")}
@@ -116,9 +129,7 @@ const VistaCadena = ({ dificultad }) => {
           onClick={() => handleButtonClick("almacenamiento")}
           disabled={enEjecucion}
         >
-          {etapas.almacenamiento
-            ? "Editar Almacenamiento"
-            : "Configurar Almacenamiento"}
+          {etapas.almacenamiento ? "Editar Almacenamiento" : "Configurar Almacenamiento"}
         </button>
       </div>
 
