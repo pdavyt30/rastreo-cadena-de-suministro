@@ -1,92 +1,119 @@
-.simulacion-container {
+.contenedor-principal {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    width: 100%;
 }
 
 .titulo {
+    margin-bottom: 20px;
     text-align: center;
+    font-size: 24px;
 }
 
-.etapa-container {
+.simulacion-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
-    position: relative;
-    margin-top: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch; /* Ambos contenedores se estiran verticalmente */
 }
 
-.linea {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    border-top: 2px solid black;
-    z-index: -1;
-}
-
-.etapa, .transicion {
+.contenedor-abastecimientos {
+    width: 38%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border: 1px solid #000;
-    padding: 20px;
-    margin: 10px;
-    background-color: white;
+    gap: 20px; /* Espacio entre las filas de abastecimiento */
+    flex-grow: 1;
+}
+
+.fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centra verticalmente las transiciones */
 }
 
 .etapa {
-    width: 300px;
-    height: 200px;
+    width: 63.16%;
+    background-color: white;
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espacio entre título y contenido */
+    height: 250px; /* Incrementa la altura para las etapas de abastecimiento */
+    height: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    border-radius: 8px;
 }
 
 .transicion {
-    width: 150px;
-    height: 100px;
+    width: 36.84%;
     background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 250px; /* Igual altura que las etapas de abastecimiento */
+    border-radius: 8px;
+    padding: 10px;
 }
 
 .contenido-etapa, .contenido-transicion {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
     flex-grow: 1;
+    width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
 }
 
-.unidad-abastecimiento, .unidad-abastecimiento-produccion {
+.unidad-abastecimiento, .unidad-produccion {
     width: 20px;
     height: 20px;
-    background-color: blue;
     margin: 2px;
+    border-radius: 4px;
+}
+
+.unidad-abastecimiento {
+    background-color: blue;
 }
 
 .unidad-produccion {
-    width: 20px;
-    height: 20px;
     background-color: red;
-    margin: 2px;
 }
 
-.stop-button, 
-.report-button {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
-    width: auto;
-    display: inline-block;
+.contenedor-produccion-almacenamiento {
+    width: 62%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1; /* Igual altura que contenedor de abastecimientos */
 }
 
-.stop-button:hover
-.report-button:hover {
-    background-color: #c9302c;
+.etapa-produccion, .etapa-almacenamiento {
+    flex: 1; /* Ambas ocupan la mitad del contenedor */
+    background-color: white;
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centra el contenido verticalmente */
+    border-radius: 8px;
+}
+
+.transicion.vertical {
+    width: 20%; /* Ancho ajustado para coherencia */
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0; /* Centra la transición verticalmente en su contenedor */
+    height: 100%; /* Ocupa toda la altura disponible */
+    border-radius: 8px;
 }
 
 .alerta {
@@ -96,10 +123,36 @@
     margin-top: 10px;
 }
 
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px; /* Espacio entre botones */
+}
+
+.stop-button, .report-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    width: auto;
+    transition: background-color 0.3s;
+}
+
 .report-button {
     background-color: #007bff;
 }
 
+.stop-button:hover {
+    background-color: #c9302c;
+}
+
 .report-button:hover {
     background-color: #0056b3;
+}
+
+h2,h3{
+    margin-bottom: 50px;
 }

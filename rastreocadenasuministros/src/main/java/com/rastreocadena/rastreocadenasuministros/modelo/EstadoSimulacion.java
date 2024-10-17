@@ -8,24 +8,24 @@ public class EstadoSimulacion {
     private Map<String, Object> abastecimiento2Condiciones;
     private Map<String, Object> produccionCondiciones;
     private Map<String, Object> almacenamientoCondiciones;
-    private int unidadesAbastecimientoAba = 0;
 
+    private int unidadesAbastecimientoAba = 0;
     private int unidadesAbastecimientoAba2 = 0;
-    private int unidadesAbastecimientoProd = 0;
+    private int unidadesAbastecimientoProduccion = 0;
     private int unidadesProductosProd = 0;
     private int unidadesProductosAlma = 0;
-    private int unidadesEnTransicion;
-    private int productosEnTransicion;
+    private int unidadesEnTransicion = 0;
+    private int unidadesEnTransicion2 = 0;
+    private int productosEnTransicion = 0;
     private String alertaAbastecimiento;
+    private String alertaAbastecimiento2;
     private String alertaProduccion;
     private String alertaAlmacenamiento;
     private int unidadesAbastecimientoGeneradas;
     private int productosGenerados;
-
     private int productosVendidos;
     private int unidadesAbastecimientoDesechadas;
     private int productosDesechados;
-
 
     // Constructor por defecto
     public EstadoSimulacion() {
@@ -37,15 +37,6 @@ public class EstadoSimulacion {
     }
 
     // Getters y Setters
-
-    public void setUnidadesAbastecimientoAba(int unidadesAbastecimientoAba) {
-        this.unidadesAbastecimientoAba = unidadesAbastecimientoAba;
-    }
-
-    public void setUnidadesAbastecimientoProd(int unidadesAbastecimientoProd) {
-        this.unidadesAbastecimientoProd = unidadesAbastecimientoProd;
-    }
-
     public boolean isEnEjecucion() {
         return enEjecucion;
     }
@@ -60,6 +51,14 @@ public class EstadoSimulacion {
 
     public void setAbastecimientoCondiciones(Map<String, Object> abastecimientoCondiciones) {
         this.abastecimientoCondiciones = abastecimientoCondiciones;
+    }
+
+    public Map<String, Object> getAbastecimiento2Condiciones() {
+        return abastecimiento2Condiciones;
+    }
+
+    public void setAbastecimiento2Condiciones(Map<String, Object> abastecimiento2Condiciones) {
+        this.abastecimiento2Condiciones = abastecimiento2Condiciones;
     }
 
     public Map<String, Object> getProduccionCondiciones() {
@@ -82,16 +81,24 @@ public class EstadoSimulacion {
         return unidadesAbastecimientoAba;
     }
 
-    public void setUnidadesAbastecimiento(int unidadesAbastecimientoAba) {
+    public void setUnidadesAbastecimientoAba(int unidadesAbastecimientoAba) {
         this.unidadesAbastecimientoAba = unidadesAbastecimientoAba;
     }
 
+    public int getUnidadesAbastecimientoAba2() {
+        return unidadesAbastecimientoAba2;
+    }
+
+    public void setUnidadesAbastecimientoAba2(int unidadesAbastecimientoAba2) {
+        this.unidadesAbastecimientoAba2 = unidadesAbastecimientoAba2;
+    }
+
     public int getUnidadesAbastecimientoProduccion() {
-        return unidadesAbastecimientoProd;
+        return unidadesAbastecimientoProduccion;
     }
 
     public void setUnidadesAbastecimientoProduccion(int unidadesAbastecimientoProd) {
-        this.unidadesAbastecimientoProd = unidadesAbastecimientoProd;
+        this.unidadesAbastecimientoProduccion = unidadesAbastecimientoProd;
     }
 
     public int getUnidadesProductosProd() {
@@ -114,8 +121,24 @@ public class EstadoSimulacion {
         return alertaAbastecimiento;
     }
 
+    public void setAlertaAbastecimiento(String alertaAbastecimiento) {
+        this.alertaAbastecimiento = alertaAbastecimiento;
+    }
+
+    public String getAlertaAbastecimiento2() {
+        return alertaAbastecimiento2;
+    }
+
+    public void setAlertaAbastecimiento2(String alertaAbastecimiento2) {
+        this.alertaAbastecimiento2 = alertaAbastecimiento2;
+    }
+
     public String getAlertaProduccion() {
         return alertaProduccion;
+    }
+
+    public void setAlertaProduccion(String alertaProduccion) {
+        this.alertaProduccion = alertaProduccion;
     }
 
     public String getAlertaAlmacenamiento() {
@@ -126,20 +149,20 @@ public class EstadoSimulacion {
         this.alertaAlmacenamiento = alertaAlmacenamiento;
     }
 
-    public void setAlertaProduccion(String alertaProduccion) {
-        this.alertaProduccion = alertaProduccion;
-    }
-
-    public void setAlertaAbastecimiento(String alertaAbastecimiento) {
-        this.alertaAbastecimiento = alertaAbastecimiento;
-    }
-
     public int getUnidadesEnTransicion() {
         return unidadesEnTransicion;
     }
 
     public void setUnidadesEnTransicion(int unidadesEnTransicion) {
         this.unidadesEnTransicion = unidadesEnTransicion;
+    }
+
+    public int getUnidadesEnTransicion2() {
+        return unidadesEnTransicion2;
+    }
+
+    public void setUnidadesEnTransicion2(int unidadesEnTransicion2) {
+        this.unidadesEnTransicion2 = unidadesEnTransicion2;
     }
 
     public int getProductosEnTransicion() {
@@ -179,7 +202,7 @@ public class EstadoSimulacion {
     }
 
     public void incrementarUnidadesAbastecimientoDesechadas(int cantidad) {
-        this.unidadesAbastecimientoDesechadas+= cantidad;
+        this.unidadesAbastecimientoDesechadas += cantidad;
     }
 
     public int getUnidadesAbastecimientoDesechadas() {
@@ -191,11 +214,83 @@ public class EstadoSimulacion {
     }
 
     public void incrementarProductosDesechados(int cantidad) {
-        this.productosDesechados+= cantidad;
+        this.productosDesechados += cantidad;
     }
 
     public int getProductosDesechados() {
         return this.productosDesechados;
+    }
+
+    // Abastecimiento
+    public void incrementarUnidadesDeAbastecimientoEnAbastecimiento() {
+        this.unidadesAbastecimientoAba++;
+    }
+
+    public void expedirUnidadesAbastecimiento() {
+        this.unidadesAbastecimientoAba = 0;
+    }
+
+    // Abastecimiento 2
+    public void incrementarUnidadesDeAbastecimientoEnAbastecimiento2() {
+        this.unidadesAbastecimientoAba2++;
+    }
+
+    public void expedirUnidadesAbastecimiento2() {
+        this.unidadesAbastecimientoAba2 = 0;
+    }
+
+    // Transición de Abastecimiento a Producción
+    public void incrementarUnidadesDeAbastecimientoEnTransicion(int cantidad) {
+        this.unidadesEnTransicion += cantidad;
+    }
+
+    public void expedirUnidadesTransicionAbastecimiento() {
+        this.unidadesEnTransicion = 0;
+    }
+
+    // Transición de Abastecimiento 2 a Producción
+    public void incrementarUnidadesDeAbastecimientoEnTransicion2(int cantidad) {
+        this.unidadesEnTransicion2 += cantidad;
+    }
+
+    public void expedirUnidadesTransicionAbastecimiento2() {
+        this.unidadesEnTransicion2 = 0;
+    }
+
+    // Producción
+    public void incrementarUnidadesDeAbastecimientoEnProduccion(int cantidad) {
+        this.unidadesAbastecimientoProduccion += cantidad;
+    }
+
+    public void producirProductos(int cantidad) {
+        if (this.unidadesAbastecimientoProduccion >= cantidad) {
+            this.unidadesAbastecimientoProduccion -= cantidad;
+            this.unidadesProductosProd += 1;
+        }
+    }
+
+    public void expedirProductosDeProduccion() {
+        this.unidadesProductosProd = 0;
+    }
+
+    // Transición de Producción a Almacenamiento
+    public void incrementarProductosEnTransicion(int cantidad) {
+        this.productosEnTransicion += cantidad;
+    }
+
+    public void expedirProductosTransicionProduccion() {
+        this.productosEnTransicion = 0;
+    }
+
+    // Almacenamiento
+    public void transferirProductosAAlmacenamiento(int cantidad) {
+        this.unidadesProductosAlma += cantidad;
+    }
+
+    public void venderProducto() {
+        if (this.unidadesProductosAlma > 0) {
+            this.unidadesProductosAlma--;
+        }
     }
 
     public void setUnidadesAbastecimientoGeneradas(int unidadesAbastecimientoGeneradas) {
@@ -216,147 +311,6 @@ public class EstadoSimulacion {
 
     public void setProductosDesechados(int productosDesechados) {
         this.productosDesechados = productosDesechados;
-    }
-
-
-    // Métodos adicionales
-
-    //Abastecimiento
-
-    /**
-     * Incrementa (+1) la cantidad de unidades de abastecimiento en la etapa de abastecimiento.
-     */
-    public void incrementarUnidadesDeAbastecimientoEnAbastecimiento() {
-        this.unidadesAbastecimientoAba++;
-    }
-
-    /**
-     * Este método se utiliza para vaciar el contador de unidades de abastecimiento en la etapa de abastecimiento
-     * una vez que las unidades han sido enviadas a la siguiente etapa (Produccion).
-     */
-    public void expedirUnidadesAbastecimiento() {
-        this.unidadesAbastecimientoAba = 0;
-    }
-
-    // Transicion de Abastecimiento a Produccion
-
-    /**
-     * Incrementa la cantidad de unidades de abastecimiento en la transicion.
-     *
-     * @param cantidad la cantidad de unidades de abastecimiento (provenientes de la etapa de abastecimiento)
-     * que se sumarán a la transicion.
-     */
-    public void incrementarUnidadesDeAbastecimientoEnTransicion(int cantidad) {
-        this.unidadesEnTransicion += cantidad;
-    }
-
-    /**
-     * Este método se utiliza para vaciar el contador de unidades de abastecimiento en la transicion de abastecimiento a produccion
-     * una vez que las unidades han sido enviadas a la siguiente etapa (Produccion).
-     */
-    public void expedirUnidadesTransicionAbastecimiento() {
-        this.unidadesEnTransicion = 0;
-    }
-
-    // Produccion:
-
-    /**
-     * Incrementa la cantidad de unidades de abastecimiento en la etapa de producción.
-     *
-     * @param cantidad la cantidad de unidades de abastecimiento (provenientes de la etapa de abastecimiento)
-     * que se sumarán a las unidades actuales en producción.
-     */
-    public void incrementarUnidadesDeAbastecimientoEnProduccion(int cantidad) {
-        this.unidadesAbastecimientoProd += cantidad;
-    }
-
-    /**
-     * Produce una unidad de producto en la etapa de producción, utilizando la cantidad especificada de unidades de abastecimiento.
-     *
-     * @param cantidad la cantidad de unidades de abastecimiento necesarias para producir una unidad de producto.
-     *                 Si hay suficientes unidades de abastecimiento disponibles, estas se reducen en la cantidad especificada
-     *                 y se incrementa en una unidad el número de productos producidos.
-     */
-    public void producirProductos(int cantidad) {
-        if (this.unidadesAbastecimientoProd >= cantidad) {
-            this.unidadesAbastecimientoProd -= cantidad;
-            this.unidadesProductosProd += 1;
-        }
-    }
-
-    /**
-     * Expide todas las unidades de productos en la etapa de producción, estableciendo su cantidad a cero.
-     * Este método se utiliza para vaciar el contador de unidades de productos una vez que han sido enviados
-     * a la siguiente etapa (Almacenamiento).
-     */
-    public void expedirProductosDeProduccion() {
-        this.unidadesProductosProd = 0;
-    }
-
-    // Transicion de Produccion a Almacenamiento
-
-    /**
-     * Incrementa la cantidad de Productos en la transicion.
-     *
-     * @param cantidad la cantidad de Productos (provenientes Produccion)
-     * que se sumarán a la transicion.
-     */
-    public void incrementarProductosEnTransicion(int cantidad) {
-        this.productosEnTransicion += cantidad;
-    }
-
-    /**
-     * Este método se utiliza para vaciar el contador de unidades de abastecimiento en la transicion de abastecimiento a produccion
-     * una vez que las unidades han sido enviadas a la siguiente etapa (Produccion).
-     */
-    public void expedirProductosTransicionProduccion() {
-        this.productosEnTransicion = 0;
-    }
-
-    //Almacenamiento
-
-    /**
-     * Transfiere una cantidad especificada de productos a la etapa de almacenamiento.
-     *
-     * @param cantidad la cantidad de productos que serán transferidos al almacenamiento.
-     *                 Esta cantidad se suma a las unidades actuales en el almacenamiento.
-     */
-    public void transferirProductosAAlmacenamiento(int cantidad) {
-        this.unidadesProductosAlma += cantidad;
-    }
-
-    /**
-     * Reduce (-1) la cantidad de productos en almacenamiento simulando una venta.
-     */
-    public void venderProducto() {
-        if (this.unidadesProductosAlma > 0) {
-            this.unidadesProductosAlma--;
-        }
-    }
-
-    // Abastecimiento 2
-    // Setter para condiciones de abastecimiento 2
-    public void setAbastecimiento2Condiciones(Map<String, Object> abastecimiento2Condiciones) {
-        this.abastecimiento2Condiciones = abastecimiento2Condiciones;
-    }
-
-    // Método para obtener unidades de abastecimiento 2
-    public int getUnidadesAbastecimientoAba2() {
-        return this.unidadesAbastecimientoAba2;
-    }
-
-    public void setUnidadesAbastecimientoAba2(int unidadesAbastecimientoAba2) {
-        this.unidadesAbastecimientoAba2 = unidadesAbastecimientoAba2;
-    }
-
-    // Método para expedir unidades de abastecimiento 2
-    public void expedirUnidadesAbastecimiento2() {
-        this.unidadesAbastecimientoAba2 = 0;  // Las unidades expedidas se vacían
-    }
-
-    // Método para incrementar unidades en abastecimiento 2
-    public void incrementarUnidadesDeAbastecimientoEnAbastecimiento2() {
-        this.unidadesAbastecimientoAba2++;
     }
 
 }

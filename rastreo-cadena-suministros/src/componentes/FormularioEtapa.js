@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './FormularioEtapa.css';
@@ -6,29 +6,33 @@ import './FormularioEtapa.css';
 const FormularioEtapa = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { tipo, etapa } = location.state || {};
+    const { tipo, etapa, tipoAbastecimiento = 1 } = location.state || {};  // Recibimos tipoAbastecimiento del estado
 
     const initialData = {
         nombre: '',
-        tipo: tipo,
+        tipo: tipo,  // 'abastecimiento', 'produccion' o 'almacenamiento'
         tiempoProduccionAbastecimiento: '',
-        tiempoProduccionAbastecimiento2: '',
         capacidadMaximaAbastecimiento: '',
-        capacidadMaximaAbastecimiento2: '',
         periodoExpedicionAbastecimiento: '',
-        periodoExpedicionAbastecimiento2: '',
         tiempoFabricacionProducto: '',
-        capacidadMaximaAbastecimientoProduccion: '', 
-        capacidadMaximaProductosProduccion: '', 
-        capacidadMaximaProductosAlmacenamiento: '', 
-        periodoExpedicionProduccion: '', 
         unidadesPorProducto: '',
-        periodoCompras: ''
+        capacidadMaximaAbastecimientoProduccion: '',
+        capacidadMaximaProductosProduccion: '',
+        capacidadMaximaProductosAlmacenamiento: '',
+        periodoExpedicionProduccion: '',
+        periodoCompras: '',
+        tipoAbastecimiento: tipoAbastecimiento  // 1 para Abastecimiento, 2 para Abastecimiento 2
     };
 
     const [etapaData, setEtapaData] = useState(etapa || initialData);
 
-    // Función para validar valores negativos y fraccionarios
+    useEffect(() => {
+        if (etapa) {
+            setEtapaData(etapa);
+        }
+    }, [etapa]);
+
+    // Validar valores negativos y fraccionarios
     const validarValor = (valor) => {
         return valor > 0 && Number.isInteger(Number(valor)); // Debe ser un número positivo y entero
     };
@@ -46,14 +50,9 @@ const FormularioEtapa = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validar que el tiempo de expedición no sea menor al tiempo de producción
+        // Validar que el periodo de expedición no sea menor al tiempo de producción
         if (tipo === 'abastecimiento' && Number(etapaData.periodoExpedicionAbastecimiento) < Number(etapaData.tiempoProduccionAbastecimiento)) {
             alert('El periodo de expedición no puede ser menor que el tiempo de producción en Abastecimiento.');
-            return;
-        }
-
-        if (tipo === 'abastecimiento2' && Number(etapaData.periodoExpedicionAbastecimiento2) < Number(etapaData.tiempoProduccionAbastecimiento2)) {
-            alert('El periodo de expedición no puede ser menor que el tiempo de producción en Abastecimiento 2.');
             return;
         }
 
@@ -74,16 +73,15 @@ const FormularioEtapa = () => {
 
     const renderFields = () => {
         switch (tipo) {
-            case 'abastecimiento':
-            case 'abastecimiento2': // Usamos el mismo formulario para abastecimiento y abastecimiento2
+            case 'abastecimiento':  // Unificamos lógica para ambos abastecimientos
                 return (
                     <>
                         <label>
                             Tiempo de Producción (minutos):
                             <input
                                 type="number"
-                                name={tipo === 'abastecimiento' ? 'tiempoProduccionAbastecimiento' : 'tiempoProduccionAbastecimiento2'}
-                                value={tipo === 'abastecimiento' ? etapaData.tiempoProduccionAbastecimiento : etapaData.tiempoProduccionAbastecimiento2}
+                                name="tiempoProduccionAbastecimiento"
+                                value={etapaData.tiempoProduccionAbastecimiento || ''}
                                 onChange={handleChange}
                                 placeholder="Ej: 5 minutos"
                                 required
@@ -94,8 +92,8 @@ const FormularioEtapa = () => {
                             <div className="input-container">
                                 <input
                                     type="number"
-                                    name={tipo === 'abastecimiento' ? 'capacidadMaximaAbastecimiento' : 'capacidadMaximaAbastecimiento2'}
-                                    value={tipo === 'abastecimiento' ? etapaData.capacidadMaximaAbastecimiento : etapaData.capacidadMaximaAbastecimiento2}
+                                    name="capacidadMaximaAbastecimiento"
+                                    value={etapaData.capacidadMaximaAbastecimiento || ''}
                                     onChange={handleChange}
                                     required
                                 />
@@ -108,8 +106,8 @@ const FormularioEtapa = () => {
                             Periodo entre Tandas de Expedición (minutos):
                             <input
                                 type="number"
-                                name={tipo === 'abastecimiento' ? 'periodoExpedicionAbastecimiento' : 'periodoExpedicionAbastecimiento2'}
-                                value={tipo === 'abastecimiento' ? etapaData.periodoExpedicionAbastecimiento : etapaData.periodoExpedicionAbastecimiento2}
+                                name="periodoExpedicionAbastecimiento"
+                                value={etapaData.periodoExpedicionAbastecimiento || ''}
                                 onChange={handleChange}
                                 placeholder="Ej: 10 minutos"
                                 required

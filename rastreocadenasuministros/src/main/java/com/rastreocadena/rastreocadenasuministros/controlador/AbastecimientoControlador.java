@@ -18,21 +18,13 @@ public class AbastecimientoControlador {
 
     @PostMapping("/guardar")
     public ResponseEntity<Abastecimiento> guardarAbastecimiento(@RequestBody Abastecimiento abastecimiento) {
-        // Si es Abastecimiento 2
-        if (abastecimiento.getTipoAbastecimiento() == 2) {
-            // Usamos los campos de Abastecimiento 2
-            abastecimiento.setTiempoProduccionAbastecimiento(abastecimiento.getTiempoProduccionAbastecimiento2());
-            abastecimiento.setCapacidadMaximaAbastecimiento(abastecimiento.getCapacidadMaximaAbastecimiento2());
-            abastecimiento.setPeriodoExpedicionAbastecimiento(abastecimiento.getPeriodoExpedicionAbastecimiento2());
-        }
-        // Guardar el abastecimiento utilizando el mismo servicio
         Abastecimiento nuevoAbastecimiento = abastecimientoServicio.guardarAbastecimiento(abastecimiento);
         return ResponseEntity.ok(nuevoAbastecimiento);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Abastecimiento>> listarAbastecimientos(@RequestParam(value = "tipo", defaultValue = "1") int tipo) {
-        List<Abastecimiento> lista = abastecimientoServicio.listarAbastecimientosPorTipo(tipo);
+    public ResponseEntity<List<Abastecimiento>> listarAbastecimientos(@RequestParam(value = "tipoAbastecimiento", required = false) Integer tipoAbastecimiento) {
+        List<Abastecimiento> lista = abastecimientoServicio.listarAbastecimientos(tipoAbastecimiento);
         return ResponseEntity.ok(lista);
     }
 }
