@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
@@ -29,9 +28,13 @@ public class EstadoSimulacionServicio {
 
     // Bloqueos para cada etapa y transición
     private final ReentrantLock lockAbastecimiento = new ReentrantLock();
+
+    private final ReentrantLock lockAbastecimiento2 = new ReentrantLock();
     private final ReentrantLock lockProduccion = new ReentrantLock();
     private final ReentrantLock lockAlmacenamiento = new ReentrantLock();
     private final ReentrantLock lockTransicionAbastecimientoProduccion = new ReentrantLock();
+
+    private final ReentrantLock lockTransicionAbastecimiento2Produccion = new ReentrantLock();
     private final ReentrantLock lockTransicionProduccionAlmacenamiento = new ReentrantLock();
 
     private int escalarTiempo(int tiempoUnidades) {
@@ -40,7 +43,8 @@ public class EstadoSimulacionServicio {
 
     public EstadoSimulacion iniciarSimulacion(Map<String, Object> etapas, String dificultad) {
         estadoSimulacion = new EstadoSimulacion(true);
-        scheduler = Executors.newScheduledThreadPool(5); // Un hilo para cada etapa y transición
+        int numeroHilos = dificultad.equals("avanzado") ? 8 : 5;
+        scheduler = Executors.newScheduledThreadPool(numeroHilos);
 
         Map<String, Object> abastecimientoCondiciones = (Map<String, Object>) etapas.get("abastecimiento");
         Map<String, Object> abastecimiento2Condiciones = null;
@@ -88,21 +92,18 @@ public class EstadoSimulacionServicio {
             periodoExpedicionAbastecimiento2 = null;
         }
 
-        // Definir tiempo de transición automáticamente según los tiempos de producción
+        // Definir tiempo de transición según los tiempos de producción
         int tiempoTransicion;
-        int tiempoReal;
-        if (tiempoProduccionAbastecimiento == 1 || tiempoFabricacionProducto == 1 ||
-                (dificultad.equals("avanzado") && tiempoProduccionAbastecimiento2 == 1)) {
+        if (tiempoProduccionAbastecimiento == escalarTiempo(1) || tiempoFabricacionProducto == escalarTiempo(1) ||
+                (dificultad.equals("avanzado") && tiempoProduccionAbastecimiento2 == escalarTiempo(1))) {
             tiempoTransicion = escalarTiempo(1);
-            tiempoReal = 1;
         } else {
             tiempoTransicion = escalarTiempo(2);
-            tiempoReal = 2;
         }
 
         // Definir variables para retrasos en el inicio de procedimientos:
-        int delayTransicionAbastecimiento = periodoExpedicionAbastecimiento + tiempoTransicion;
-        int delayFabricacionProducto = delayTransicionAbastecimiento + tiempoTransicion + tiempoFabricacionProducto;
+        int delayTransicionAbastecimiento = periodoExpedicionAbastecimiento + tiempoTransicion ;
+        int delayFabricacionProducto = delayTransicionAbastecimiento + tiempoFabricacionProducto;
         int delayTransicionProduccion = delayTransicionAbastecimiento + periodoExpedicionProduccion;
         int delayTransicionAlmacenamiento = delayTransicionProduccion + tiempoTransicion;
 
@@ -110,38 +111,56 @@ public class EstadoSimulacionServicio {
             throw new IllegalArgumentException("Uno o más valores de las condiciones son nulos");
         }
 
-        // Contador para manejar las ejecuciones de expedición e incremento en Abastecimiento
-        AtomicInteger contadorExpedicionAbastecimiento = new AtomicInteger();
-
-        // Lógica combinada para la producción y expedición en Abastecimiento
+        // [Expedición de Unidades] - Envía las unidades generadas a la siguiente etapa
         scheduler.scheduleAtFixedRate(() -> {
             lockAbastecimiento.lock();
             try {
-                // Incrementar el contador en cada ciclo
-                contadorExpedicionAbastecimiento.getAndIncrement();
-
-                // Verificar si es tiempo de expedir
-                boolean esTiempoDeExpedicion = contadorExpedicionAbastecimiento.get() >= (periodoExpedicionAbastecimiento / tiempoProduccionAbastecimiento);
-
-                // Esta parte del codigo se encarga de expedir las unidades de abastecimiento desde Abastecimiento
-                if (esTiempoDeExpedicion && estadoSimulacion.getUnidadesAbastecimientoAba() > 0) {
+                if (estadoSimulacion.getUnidadesAbastecimientoAba() > 0) {
                     lockTransicionAbastecimientoProduccion.lock();
                     try {
                         int unidadesParaTransicion = estadoSimulacion.getUnidadesAbastecimientoAba();
                         estadoSimulacion.incrementarUnidadesDeAbastecimientoEnTransicion(unidadesParaTransicion);
                         estadoSimulacion.expedirUnidadesAbastecimiento();
                         estadoSimulacion.setAlertaAbastecimiento(null);
-
-                        // Reiniciar el contador luego de la expedición
-                        contadorExpedicionAbastecimiento.set(0);
                     } finally {
                         lockTransicionAbastecimientoProduccion.unlock();
                     }
-                } else if (esTiempoDeExpedicion && estadoSimulacion.getUnidadesAbastecimientoAba() == 0) {
+                } else {
                     estadoSimulacion.setAlertaAbastecimiento("No hay productos para expedir");
                 }
+            } finally {
+                lockAbastecimiento.unlock();
+            }
+        }, periodoExpedicionAbastecimiento, periodoExpedicionAbastecimiento, TimeUnit.MILLISECONDS);
 
-                // Esta parte del codigo incrementa las unidades de abastecimiento en Abastecimiento si hay espacio
+        // [Expedición de Unidades desde Abastecimiento 2] - Envía las unidades generadas a la siguiente etapa
+        if (dificultad.equals("avanzado")) {
+            scheduler.scheduleAtFixedRate(() -> {
+                lockAbastecimiento2.lock();
+                try {
+                    if (estadoSimulacion.getUnidadesAbastecimientoAba2() > 0) {
+                        lockTransicionAbastecimiento2Produccion.lock();
+                        try {
+                            int unidadesParaTransicion2 = estadoSimulacion.getUnidadesAbastecimientoAba2();
+                            estadoSimulacion.incrementarUnidadesDeAbastecimientoEnTransicion2(unidadesParaTransicion2);
+                            estadoSimulacion.expedirUnidadesAbastecimiento2();
+                            estadoSimulacion.setAlertaAbastecimiento2(null);
+                        } finally {
+                            lockTransicionAbastecimiento2Produccion.unlock();
+                        }
+                    } else {
+                        estadoSimulacion.setAlertaAbastecimiento2("No hay productos para expedir en Abastecimiento 2");
+                    }
+                } finally {
+                    lockAbastecimiento2.unlock();
+                }
+            }, periodoExpedicionAbastecimiento2, periodoExpedicionAbastecimiento2, TimeUnit.MILLISECONDS);
+        }
+
+        // [Incremento de Unidades en Abastecimiento] - Produce una unidad de Abastecimiento cada vez que se ejecuta
+        scheduler.scheduleAtFixedRate(() -> {
+            lockAbastecimiento.lock();
+            try {
                 if (estadoSimulacion.getUnidadesAbastecimientoAba() < capacidadMaximaAbastecimiento) {
                     estadoSimulacion.incrementarUnidadesDeAbastecimientoEnAbastecimiento();
                     estadoSimulacion.incrementarUnidadesAbastecimientoGeneradas();
@@ -155,33 +174,11 @@ public class EstadoSimulacionServicio {
             }
         }, tiempoProduccionAbastecimiento, tiempoProduccionAbastecimiento, TimeUnit.MILLISECONDS);
 
-        // Si estamos en el modo avanzado, también aplicamos la lógica para Abastecimiento 2
+        // [Incremento de Unidades en Abastecimiento 2] - Produce una unidad de Abastecimiento cada vez que se ejecuta
         if (dificultad.equals("avanzado")) {
-            AtomicInteger contadorExpedicionAbastecimiento2 = new AtomicInteger();
-
             scheduler.scheduleAtFixedRate(() -> {
-                lockAbastecimiento.lock();
+                lockAbastecimiento2.lock();
                 try {
-                    contadorExpedicionAbastecimiento2.getAndIncrement();
-
-                    boolean esTiempoDeExpedicion2 = contadorExpedicionAbastecimiento2.get() >= (periodoExpedicionAbastecimiento2 / tiempoProduccionAbastecimiento2);
-
-                    if (esTiempoDeExpedicion2 && estadoSimulacion.getUnidadesAbastecimientoAba2() > 0) {
-                        lockTransicionAbastecimientoProduccion.lock();
-                        try {
-                            int unidadesParaTransicion2 = estadoSimulacion.getUnidadesAbastecimientoAba2();
-                            estadoSimulacion.incrementarUnidadesDeAbastecimientoEnTransicion(unidadesParaTransicion2);
-                            estadoSimulacion.expedirUnidadesAbastecimiento2();
-                            estadoSimulacion.setAlertaAbastecimiento2(null);
-
-                            contadorExpedicionAbastecimiento2.set(0);
-                        } finally {
-                            lockTransicionAbastecimientoProduccion.unlock();
-                        }
-                    } else if (esTiempoDeExpedicion2 && estadoSimulacion.getUnidadesAbastecimientoAba2() == 0) {
-                        estadoSimulacion.setAlertaAbastecimiento2("No hay productos para expedir en Abastecimiento 2");
-                    }
-
                     if (estadoSimulacion.getUnidadesAbastecimientoAba2() < capacidadMaximaAbastecimiento2) {
                         estadoSimulacion.incrementarUnidadesDeAbastecimientoEnAbastecimiento2();
                         estadoSimulacion.incrementarUnidadesAbastecimientoGeneradas();
@@ -191,119 +188,108 @@ public class EstadoSimulacionServicio {
                         estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas();
                     }
                 } finally {
-                    lockAbastecimiento.unlock();
+                    lockAbastecimiento2.unlock();
                 }
             }, tiempoProduccionAbastecimiento2, tiempoProduccionAbastecimiento2, TimeUnit.MILLISECONDS);
         }
 
-        // Lógica para la transferencia de las unidades de abastecimiento desde Transición a Producción
+
+        // [TRANSICION 1] Lógica para la transferencia de las unidades de abastecimiento desde Transición a Producción
         scheduler.scheduleAtFixedRate(() -> {
             lockTransicionAbastecimientoProduccion.lock();
             try {
-                lockProduccion.lock();
-                try {
-                    int unidadesParaProduccion = estadoSimulacion.getUnidadesEnTransicion();
-                    int espacioDisponibleProduccion = capacidadMaximaAbastecimientoProduccion - estadoSimulacion.getUnidadesAbastecimientoProduccion();
+                int unidadesParaProduccion = estadoSimulacion.getUnidadesEnTransicion();
+                int espacioDisponibleProduccion = capacidadMaximaAbastecimientoProduccion - estadoSimulacion.getUnidadesAbastecimientoProduccion();
 
-                    if (unidadesParaProduccion <= espacioDisponibleProduccion) {
-                        estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(unidadesParaProduccion);
-                        estadoSimulacion.setAlertaProduccion("Unidades recibidas: " + unidadesParaProduccion);
-                    } else {
-                        int unidadesDesechadas = unidadesParaProduccion - espacioDisponibleProduccion;
-                        estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(espacioDisponibleProduccion);
-                        estadoSimulacion.setAlertaProduccion("Unidades recibidas: " + espacioDisponibleProduccion + " - Unidades desechadas: " + unidadesDesechadas);
-                        estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas(unidadesDesechadas);
-                    }
-                    estadoSimulacion.expedirUnidadesTransicionAbastecimiento();
-                } finally {
-                    lockProduccion.unlock();
+                if (unidadesParaProduccion <= espacioDisponibleProduccion) {
+                    estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(unidadesParaProduccion);
+                    estadoSimulacion.setAlertaProduccion("Unidades recibidas: " + unidadesParaProduccion);
+                } else {
+                    int unidadesDesechadas = unidadesParaProduccion - espacioDisponibleProduccion;
+                    estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(espacioDisponibleProduccion);
+                    estadoSimulacion.setAlertaProduccion("Unidades recibidas: " + espacioDisponibleProduccion + " - Unidades desechadas: " + unidadesDesechadas);
+                    estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas(unidadesDesechadas);
                 }
+                estadoSimulacion.expedirUnidadesTransicionAbastecimiento();
             } finally {
                 lockTransicionAbastecimientoProduccion.unlock();
             }
-        }, delayTransicionAbastecimiento, delayTransicionAbastecimiento, TimeUnit.MILLISECONDS);
+        }, delayTransicionAbastecimiento, periodoExpedicionAbastecimiento, TimeUnit.MILLISECONDS);
 
-        // Lógica para manejar la transferencia de las unidades de Abastecimiento 2 en modo avanzado
+        // [TRANSICION 2]Lógica para manejar la transferencia de las unidades de Abastecimiento 2 en modo avanzado
         if (dificultad.equals("avanzado")) {
             scheduler.scheduleAtFixedRate(() -> {
-                lockTransicionAbastecimientoProduccion.lock();
+                lockTransicionAbastecimiento2Produccion.lock();
                 try {
                     lockProduccion.lock();
                     try {
-                        int unidadesParaProduccion2 = estadoSimulacion.getUnidadesEnTransicion2();
-                        int espacioDisponibleProduccion2 = capacidadMaximaAbastecimientoProduccion - estadoSimulacion.getUnidadesAbastecimientoProduccion();
+                        int unidadesParaProduccion = estadoSimulacion.getUnidadesEnTransicion2();
+                        int espacioDisponibleProduccion = capacidadMaximaAbastecimientoProduccion - estadoSimulacion.getUnidadesAbastecimientoProduccion();
 
-                        if (unidadesParaProduccion2 <= espacioDisponibleProduccion2) {
-                            estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(unidadesParaProduccion2);
-                            estadoSimulacion.setAlertaProduccion("Unidades recibidas desde Abastecimiento 2: " + unidadesParaProduccion2);
+                        if (unidadesParaProduccion <= espacioDisponibleProduccion) {
+                            estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(unidadesParaProduccion);
+                            estadoSimulacion.setAlertaProduccion("Unidades recibidas desde Abastecimiento 2: " + unidadesParaProduccion);
                         } else {
-                            int unidadesDesechadas2 = unidadesParaProduccion2 - espacioDisponibleProduccion2;
-                            estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(espacioDisponibleProduccion2);
-                            estadoSimulacion.setAlertaProduccion("Unidades recibidas desde Abastecimiento 2: " + espacioDisponibleProduccion2 + " - Unidades desechadas: " + unidadesDesechadas2);
-                            estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas(unidadesDesechadas2);
+                            int unidadesDesechadas = unidadesParaProduccion - espacioDisponibleProduccion;
+                            estadoSimulacion.incrementarUnidadesDeAbastecimientoEnProduccion(espacioDisponibleProduccion);
+                            estadoSimulacion.setAlertaProduccion("Unidades recibidas desde Abastecimiento 2: " + espacioDisponibleProduccion + " - Unidades desechadas: " + unidadesDesechadas);
+                            estadoSimulacion.incrementarUnidadesAbastecimientoDesechadas(unidadesDesechadas);
                         }
                         estadoSimulacion.expedirUnidadesTransicionAbastecimiento2();
                     } finally {
                         lockProduccion.unlock();
                     }
                 } finally {
-                    lockTransicionAbastecimientoProduccion.unlock();
+                    lockTransicionAbastecimiento2Produccion.unlock();
                 }
-            }, delayTransicionAbastecimiento, delayTransicionAbastecimiento, TimeUnit.MILLISECONDS);
+            }, delayTransicionAbastecimiento, escalarTiempo(4), TimeUnit.MILLISECONDS);
         }
 
-        // Contador para manejar las ejecuciones de producción y expedición
-        AtomicInteger contadorExpedicionProduccion = new AtomicInteger();
-
-        // Lógica combinada para la producción y expedición en Producción
+        // Proceso de expedición: Expedir productos cada 'periodoExpedicionProduccion'
         scheduler.scheduleAtFixedRate(() -> {
             lockProduccion.lock();
             try {
-                // Incrementar contador
-                contadorExpedicionProduccion.getAndIncrement();
-
-                // Verificar si es tiempo de expedir productos
-                boolean esTiempoDeExpedicion = contadorExpedicionProduccion.get() >= (periodoExpedicionProduccion / tiempoFabricacionProducto);
-
-                // Si es el momento de expedir, hacerlo primero
-                if (esTiempoDeExpedicion && estadoSimulacion.getUnidadesProductosProd() > 0) {
+                if (estadoSimulacion.getUnidadesProductosProd() > 0) {
                     lockTransicionProduccionAlmacenamiento.lock();
                     try {
                         int unidadesParaAlmacenamiento = estadoSimulacion.getUnidadesProductosProd();
                         estadoSimulacion.expedirProductosDeProduccion();
                         estadoSimulacion.incrementarProductosEnTransicion(unidadesParaAlmacenamiento);
-
-                        // Reiniciar el contador de expedición
-                        contadorExpedicionProduccion.set(0);
                     } finally {
                         lockTransicionProduccionAlmacenamiento.unlock();
                     }
-                } else if (esTiempoDeExpedicion && estadoSimulacion.getUnidadesProductosProd() == 0) {
+                } else {
                     estadoSimulacion.setAlertaProduccion("No hay productos para expedir");
                 }
+            } finally {
+                lockProduccion.unlock();
+            }
+        }, delayTransicionProduccion, periodoExpedicionProduccion, TimeUnit.MILLISECONDS);
 
-                // Luego, realizar la producción de unidades si es posible
+        // Proceso de producción: Genera un producto cada 'tiempoFabricacionProducto'
+        scheduler.scheduleAtFixedRate(() -> {
+            lockProduccion.lock();
+            try {
                 boolean faltaUnidades = estadoSimulacion.getUnidadesAbastecimientoProduccion() < unidadesPorProducto;
                 boolean produccionLlena = estadoSimulacion.getUnidadesProductosProd() >= capacidadMaximaProductosProduccion;
 
                 if (faltaUnidades && produccionLlena) {
-                    estadoSimulacion.setAlertaProduccion("No hay suficientes unidades de abastecimiento para producir y la capacidad de producción está llena.");
+                    estadoSimulacion.setAlertaProduccion("No hay suficientes unidades de abastecimiento y la producción está llena.");
                 } else if (faltaUnidades) {
-                    estadoSimulacion.setAlertaProduccion("No hay suficientes unidades de abastecimiento para producir.");
+                    estadoSimulacion.setAlertaProduccion("No hay suficientes unidades de abastecimiento.");
                 } else if (produccionLlena) {
                     estadoSimulacion.setAlertaProduccion("Capacidad máxima de producción alcanzada.");
                     estadoSimulacion.incrementarProductosDesechados();
                 } else {
                     estadoSimulacion.producirProductos(unidadesPorProducto);
                     estadoSimulacion.incrementarProductosGenerados();
-                    estadoSimulacion.setAlertaProduccion(null);
                 }
             } finally {
                 lockProduccion.unlock();
             }
         }, delayFabricacionProducto, tiempoFabricacionProducto, TimeUnit.MILLISECONDS);
 
-        // Lógica para la transferencia de Productos desde Transición a Almacenamiento
+        // [TRANSICION PROD-ALM] Lógica para la transferencia de Productos desde Transición a Almacenamiento
         scheduler.scheduleAtFixedRate(() -> {
             lockTransicionProduccionAlmacenamiento.lock();
             try {
@@ -327,9 +313,9 @@ public class EstadoSimulacionServicio {
             } finally {
                 lockTransicionProduccionAlmacenamiento.unlock();
             }
-        }, delayTransicionAlmacenamiento, periodoExpedicionProduccion + tiempoTransicion, TimeUnit.MILLISECONDS);
+        }, delayTransicionAlmacenamiento, periodoExpedicionProduccion, TimeUnit.MILLISECONDS);
 
-        // Lógica para la compra de productos desde Almacenamiento
+        // [ALMACENAMIENTO] Lógica para la compra de productos desde Almacenamiento
         scheduler.scheduleAtFixedRate(() -> {
             lockAlmacenamiento.lock();
             try {

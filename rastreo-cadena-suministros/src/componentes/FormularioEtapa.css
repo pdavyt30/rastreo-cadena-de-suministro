@@ -1,58 +1,90 @@
-form {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: auto;
-    margin-top: 50px;
+/* Mantener el body y el html ocupando toda la pantalla */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0; /* Fondo claro */
+    display: flex;
+    flex-direction: column;
 }
 
+/* Contenedor principal para la vista */
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Espacio alrededor del formulario */
+    box-sizing: border-box;
+    max-height: 550px;
+}
+
+/* Estilos del formulario */
+form {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Usar el 100% del ancho disponible dentro del contenedor */
+    max-width: 400px; /* Límite máximo de ancho */
+    max-height: 70vh; /* Limitar la altura al 80% de la pantalla */
+    overflow-y:visible; /* Agregar scroll si es necesario */
+    overflow-x: hidden;
+}
+
+/* Ajuste del título */
 h2 {
     margin-bottom: 20px;
     color: #333;
+    text-align: center;
 }
 
+/* Estilos para las etiquetas */
 label {
     display: block;
     margin-bottom: 10px;
     color: #555;
 }
 
+/* Estilo del contenedor con ícono */
 .input-container {
     position: relative;
 }
 
+/* Estilo para los inputs */
 input[type="text"],
 input[type="number"] {
-    width: 100%; /* Ajustar el tamaño para todo el contenedor */
-    padding: 10px 40px 10px 10px; /* Agregar espacio para el ícono */
+    width: 100%; /* Ajustar el ancho al contenedor */
+    padding: 10px;
     margin-top: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
+/* Estilo del botón */
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 10px;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
+/* Estilo del ícono de información */
 .info-icon {
     position: absolute;
-    top: 50%;
-    right: 10px;
+    top: 40%;
+    right: 0px;
     transform: translateY(-50%);
     cursor: pointer;
     border-radius: 50%;
@@ -65,6 +97,7 @@ button:hover {
     line-height: 16px;
 }
 
+/* Tooltip del ícono */
 .tooltip {
     visibility: hidden;
     background-color: #555;
@@ -72,28 +105,14 @@ button:hover {
     text-align: center;
     border-radius: 5px;
     position: absolute;
-    bottom: 125%; /* Posicionar el tooltip por encima del ícono */
+    bottom: 125%;
     width: 120px;
     opacity: 0;
     transition: opacity 0.3s;
 }
 
 .info-icon:hover .tooltip {
-    visibility: visible;
+    visibility:visible;
     opacity: 1;
-}
 
-/* Cambiar el color del placeholder */
-input::placeholder {
-    color: #b0b0b0; /* Color gris más claro */
-    opacity: 1; /* Para asegurar que el color se vea correctamente */
-}
-
-/* Para navegadores más antiguos (compatibilidad) */
-input:-ms-input-placeholder {
-    color: #b0b0b0;
-}
-
-input::-ms-input-placeholder {
-    color: #b0b0b0;
 }

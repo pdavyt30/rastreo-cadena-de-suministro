@@ -63,7 +63,7 @@ public class EstadoSimulacionControlador {
             Map<String, Object> abastecimientoCondiciones = estadoSimulacion.getAbastecimientoCondiciones();
             reporte.append("Abastecimiento:\n");
             reporte.append("Tiempo de Producción en Abastecimiento: " + abastecimientoCondiciones.get("tiempoProduccionAbastecimiento") + " minutos\n");
-            reporte.append("Capacidad Máxima de Abastecimiento: " + abastecimientoCondiciones.get("capacidadMaximaAbastecimiento") + "\n");
+            reporte.append("Capacidad Máxima de Abastecimiento: " + abastecimientoCondiciones.get("capacidadMaximaAbastecimiento") + "unidades\n");
             reporte.append("Periodo entre Tandas de Expedición: " + abastecimientoCondiciones.get("periodoExpedicionAbastecimiento") + " minutos\n\n");
 
             // Condiciones de Producción
@@ -71,14 +71,14 @@ public class EstadoSimulacionControlador {
             reporte.append("Producción:\n");
             reporte.append("Unidades por Producto: " + produccionCondiciones.get("unidadesPorProducto") + "\n");
             reporte.append("Tiempo de Fabricación de Producto: " + produccionCondiciones.get("tiempoFabricacionProducto") + " minutos\n");
-            reporte.append("Capacidad Máxima de Abastecimiento en Producción: " + produccionCondiciones.get("capacidadMaximaAbastecimientoProduccion") + "\n");
-            reporte.append("Capacidad Máxima de Productos en Producción: " + produccionCondiciones.get("capacidadMaximaProductosProduccion") + "\n");
+            reporte.append("Capacidad Máxima de Abastecimiento en Producción: " + produccionCondiciones.get("capacidadMaximaAbastecimientoProduccion") + "unidades\n");
+            reporte.append("Capacidad Máxima de Productos en Producción: " + produccionCondiciones.get("capacidadMaximaProductosProduccion") + "productos\n");
             reporte.append("Periodo entre Expediciones en Producción: " + produccionCondiciones.get("periodoExpedicionProduccion") + " minutos\n\n");
 
             // Condiciones de Almacenamiento
             Map<String, Object> almacenamientoCondiciones = estadoSimulacion.getAlmacenamientoCondiciones();
             reporte.append("Almacenamiento:\n");
-            reporte.append("Capacidad Máxima de Productos en Almacenamiento: " + almacenamientoCondiciones.get("capacidadMaximaProductosAlmacenamiento") + "\n");
+            reporte.append("Capacidad Máxima de Productos en Almacenamiento: " + almacenamientoCondiciones.get("capacidadMaximaProductosAlmacenamiento") + "productos\n");
             reporte.append("Periodo de Compras: " + almacenamientoCondiciones.get("periodoCompras") + " minutos\n\n");
 
             reporte.append("=====================================\n");
@@ -93,9 +93,9 @@ public class EstadoSimulacionControlador {
 
             // Información sobre las unidades y productos en las etapas
             reporte.append("Unidades de Abastecimiento en Abastecimiento: " + estadoSimulacion.getUnidadesAbastecimientoAba() + "\n");
+            reporte.append("Unidades en Transición de Abastecimiento a Producción: " + estadoSimulacion.getUnidadesEnTransicion() + "\n");
             reporte.append("Unidades de Abastecimiento en Producción: " + estadoSimulacion.getUnidadesAbastecimientoProduccion() + "\n");
             reporte.append("Productos en Producción: " + estadoSimulacion.getUnidadesProductosProd() + "\n");
-            reporte.append("Unidades en Transición de Abastecimiento a Producción: " + estadoSimulacion.getUnidadesEnTransicion() + "\n");
             reporte.append("Productos en Transición de Producción a Almacenamiento: " + estadoSimulacion.getProductosEnTransicion() + "\n");
             reporte.append("Productos en Almacenamiento: " + estadoSimulacion.getUnidadesProductosAlma() + "\n");
 
