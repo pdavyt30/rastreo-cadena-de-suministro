@@ -1,0 +1,271 @@
+.simulacion-contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #0f1b2b;
+    height: 100%;
+}
+
+.simulacion-titulo-principiante {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 22px;
+    color: white;
+}
+
+
+.simulacion-titulo-avanzado {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 36px;
+    color: white;
+
+}
+
+.simulacion-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.simulacion-contenedor-abastecimientos {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.simulacion-fila {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Etapas de Abastecimiento */
+.abastecimiento-etapa-principiante {
+    min-height: 330px;
+    width: 270px;
+    background-image: url('../../imagenes/imagenSimulacionAbastecimiento.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.abastecimiento-etapa-avanzado {
+    height: 180px;
+    width: 270px;
+    background-image: url('../../imagenes/imagenSimulacionAbastecimiento.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Etapa de Producción */
+.produccion-etapa {
+    width: 290px;
+    background-image: url('../../imagenes/imagenSimulacionProduccion.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Etapa de Almacenamiento */
+.almacenamiento-etapa {
+    width: 270px;
+    background-image: url('../../imagenes/imagenSimulacionAlmacenamiento.png');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.simulacion-contenedor-produccion-almacenamiento {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 10px;
+    height: 330px;
+}
+
+.simulacion-contenido-etapa {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+
+.simulacion-transicion-vertical {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #f2f2f2;
+}
+
+.simulacion-transicion {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    flex-direction: column;
+    color: #f2f2f2;
+
+    align-items: center;
+}
+
+.simulacion-contenido-transicion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    max-width: 50%;
+    min-width: 50%;
+}
+
+/* Unidades de Abastecimiento */
+.simulacion-unidad-abastecimiento {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    border-radius: 4px;
+    background-image: url('../../imagenes/imagenSimulacionUnidadAbastecimiento.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombra para destacarlas */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+}
+
+/* Productos */
+.simulacion-unidad-produccion {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    border-radius: 4px;
+    background-image: url('../../imagenes/imagenSimulacionProducto.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color:rgba(255, 255, 255, 0.9);/* Fondo blanco semitransparente */
+}
+
+
+.simulacion-button-container-principiante {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.simulacion-button-container-avanzado {
+    margin-top: 0px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.simulacion-stop-button,
+.simulacion-report-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.simulacion-stop-button {
+    background-color: #d9534f;
+    color: white;
+}
+
+.simulacion-report-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.simulacion-stop-button:hover {
+    background-color: #c9302c;
+}
+
+.simulacion-report-button:hover {
+    background-color: #0056b3;
+}
+
+.simulacion-h2 {
+    font-size: 16px;
+    font-weight: 1000;
+    width: 100%;
+    color: #f2f2f2;
+    background-color: rgb(71, 67, 67,80%);
+    padding: 5px;
+}
+
+.simulacion-alerta {
+    font-size: 12px;
+    align-content: center;
+    font-weight: 700;
+    color: #ff0800;
+    margin-top: auto;
+    background-color: rgb(63, 62, 62,80%);
+    padding: 8px;
+}
+
+/* Media queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .simulacion-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .simulacion-contenedor-produccion-almacenamiento {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+    }
+
+    .simulacion-etapa,
+    .simulacion-etapa-produccion,
+    .simulacion-etapa-almacenamiento {
+        width: 80%;
+        max-width: 300px;
+    }
+}
