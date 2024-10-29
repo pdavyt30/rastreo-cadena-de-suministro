@@ -42,30 +42,34 @@ public class EstadoSimulacionServicio {
     }
 
     public EstadoSimulacion iniciarSimulacion(Map<String, Object> etapas, String dificultad) {
-        estadoSimulacion = new EstadoSimulacion(true);
-        int numeroHilos = dificultad.equals("avanzado") ? 8 : 5;
-        scheduler = Executors.newScheduledThreadPool(numeroHilos);
 
+        estadoSimulacion = new EstadoSimulacion(true);
+        scheduler = Executors.newScheduledThreadPool(5);
+
+        //Se guardan las condiciones de las etapas (valores ingresados por el usuario)
         Map<String, Object> abastecimientoCondiciones = (Map<String, Object>) etapas.get("abastecimiento");
         Map<String, Object> abastecimiento2Condiciones = null;
         Map<String, Object> produccionCondiciones = (Map<String, Object>) etapas.get("produccion");
         Map<String, Object> almacenamientoCondiciones = (Map<String, Object>) etapas.get("almacenamiento");
 
+        //Se guardan las condiciones de Abastecimiento 2 (dificultad avanzado)
         if (dificultad.equals("avanzado")) {
             abastecimiento2Condiciones = (Map<String, Object>) etapas.get("abastecimiento2");
             estadoSimulacion.setAbastecimiento2Condiciones(abastecimiento2Condiciones);
         }
 
+        //Control para que ninguna condicion quede sin valor
         if (abastecimientoCondiciones == null || produccionCondiciones == null || almacenamientoCondiciones == null ||
                 (dificultad.equals("avanzado") && abastecimiento2Condiciones == null)) {
             throw new IllegalArgumentException("Faltan condiciones para una o más etapas");
         }
 
+        //Se carga el estadoSimulacion con los valores de las condiciones de las etapas
         estadoSimulacion.setAbastecimientoCondiciones(abastecimientoCondiciones);
         estadoSimulacion.setProduccionCondiciones(produccionCondiciones);
         estadoSimulacion.setAlmacenamientoCondiciones(almacenamientoCondiciones);
 
-        // Obtener valores ingresados por el usuario:
+        //Se descomponen los mapas de condiciones en variables locales para el estadoSimulacion:
         int tiempoProduccionAbastecimiento = escalarTiempo((Integer) abastecimientoCondiciones.get("tiempoProduccionAbastecimiento"));
         int capacidadMaximaAbastecimiento = (Integer) abastecimientoCondiciones.get("capacidadMaximaAbastecimiento");
         int periodoExpedicionAbastecimiento = escalarTiempo((Integer) abastecimientoCondiciones.get("periodoExpedicionAbastecimiento"));
@@ -92,7 +96,7 @@ public class EstadoSimulacionServicio {
             periodoExpedicionAbastecimiento2 = null;
         }
 
-        // Definir tiempo de transición según los tiempos de producción
+        // Se define tiempo de transición según los tiempos de producción
         int tiempoTransicion;
         if (tiempoProduccionAbastecimiento == escalarTiempo(1) || tiempoFabricacionProducto == escalarTiempo(1) ||
                 (dificultad.equals("avanzado") && tiempoProduccionAbastecimiento2 == escalarTiempo(1))) {
@@ -101,7 +105,7 @@ public class EstadoSimulacionServicio {
             tiempoTransicion = escalarTiempo(2);
         }
 
-        // Definir variables para retrasos en el inicio de procedimientos:
+        // Se definen variables para retrasos en el inicio de procedimientos:
         int delayTransicionAbastecimiento = periodoExpedicionAbastecimiento + tiempoTransicion ;
         int delayFabricacionProducto = delayTransicionAbastecimiento + tiempoFabricacionProducto;
         int delayTransicionProduccion = delayTransicionAbastecimiento + periodoExpedicionProduccion;
@@ -111,7 +115,9 @@ public class EstadoSimulacionServicio {
             throw new IllegalArgumentException("Uno o más valores de las condiciones son nulos");
         }
 
-        // [Expedición de Unidades] - Envía las unidades generadas a la siguiente etapa
+        //Procesos ejecutados periodicamente para la actualizacion de los valores en la simulacion.
+
+        // [Expedición de Unidades desde Abastecimiento] - Envía las unidades generadas a la siguiente etapa
         scheduler.scheduleAtFixedRate(() -> {
             lockAbastecimiento.lock();
             try {
@@ -193,7 +199,6 @@ public class EstadoSimulacionServicio {
             }, tiempoProduccionAbastecimiento2, tiempoProduccionAbastecimiento2, TimeUnit.MILLISECONDS);
         }
 
-
         // [TRANSICION 1] Lógica para la transferencia de las unidades de abastecimiento desde Transición a Producción
         scheduler.scheduleAtFixedRate(() -> {
             lockTransicionAbastecimientoProduccion.lock();
@@ -216,7 +221,7 @@ public class EstadoSimulacionServicio {
             }
         }, delayTransicionAbastecimiento, periodoExpedicionAbastecimiento, TimeUnit.MILLISECONDS);
 
-        // [TRANSICION 2]Lógica para manejar la transferencia de las unidades de Abastecimiento 2 en modo avanzado
+        // [TRANSICION 2] Lógica para manejar la transferencia de las unidades de abastecimiento desde Transicion 2 a Producción
         if (dificultad.equals("avanzado")) {
             scheduler.scheduleAtFixedRate(() -> {
                 lockTransicionAbastecimiento2Produccion.lock();
@@ -245,7 +250,7 @@ public class EstadoSimulacionServicio {
             }, delayTransicionAbastecimiento, escalarTiempo(4), TimeUnit.MILLISECONDS);
         }
 
-        // Proceso de expedición: Expedir productos cada 'periodoExpedicionProduccion'
+        // [EXPEDICIÓN DE PRODUCTOS] Expedir productos cada 'periodoExpedicionProduccion'
         scheduler.scheduleAtFixedRate(() -> {
             lockProduccion.lock();
             try {
@@ -266,7 +271,7 @@ public class EstadoSimulacionServicio {
             }
         }, delayTransicionProduccion, periodoExpedicionProduccion, TimeUnit.MILLISECONDS);
 
-        // Proceso de producción: Genera un producto cada 'tiempoFabricacionProducto'
+        // [INCREMENTO DE PRODUCTO]  Genera un nuevo producto cada 'tiempoFabricacionProducto'
         scheduler.scheduleAtFixedRate(() -> {
             lockProduccion.lock();
             try {

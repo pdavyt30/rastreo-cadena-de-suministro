@@ -6,7 +6,7 @@ import './FormularioEtapa.css';
 const FormularioEtapa = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { tipo, tipoAbastecimiento = 1 } = location.state || {}; // Recibe tipoAbastecimiento desde la navegación
+    const { tipo, tipoAbastecimiento } = location.state || {}; // Recibe tipo y tipoAbastecimiento correctamente
 
     const initialData = {
         tiempoProduccionAbastecimiento: '',
@@ -19,6 +19,7 @@ const FormularioEtapa = () => {
         periodoExpedicionProduccion: '',
         capacidadMaximaProductosAlmacenamiento: '',
         periodoCompras: '',
+        tipoAbastecimiento, // Asignamos tipoAbastecimiento desde el estado
     };
 
     const [etapaData, setEtapaData] = useState(initialData);
@@ -33,7 +34,7 @@ const FormularioEtapa = () => {
 
                 const response = await axios.get(url);
                 if (response.data.length > 0) {
-                    setEtapaData(response.data[0]); // Cargar datos existentes
+                    setEtapaData(response.data[0]); // Carga los datos existentes correctamente
                 }
             } catch (error) {
                 console.error('Error obteniendo los datos de la etapa:', error);
@@ -83,18 +84,13 @@ const FormularioEtapa = () => {
                         </label>
                         <label>
                             Capacidad Máxima de Abastecimiento:
-                            <div className="input-container">
-                                <input
-                                    type="number"
-                                    name="capacidadMaximaAbastecimiento"
-                                    value={etapaData.capacidadMaximaAbastecimiento || ''}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <span className="info-icon">i
-                                    <span className="tooltip">Capacidad máxima que puede almacenar la etapa de abastecimiento.</span>
-                                </span>
-                            </div>
+                            <input
+                                type="number"
+                                name="capacidadMaximaAbastecimiento"
+                                value={etapaData.capacidadMaximaAbastecimiento || ''}
+                                onChange={handleChange}
+                                required
+                            />
                         </label>
                         <label>
                             Periodo entre Tandas de Expedición (minutos):
@@ -113,18 +109,13 @@ const FormularioEtapa = () => {
                     <>
                         <label>
                             Unidades por Producto:
-                            <div className="input-container">
-                                <input
-                                    type="number"
-                                    name="unidadesPorProducto"
-                                    value={etapaData.unidadesPorProducto || ''}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <span className="info-icon">i
-                                    <span className="tooltip">Número de unidades de abastecimiento necesarias para fabricar un producto.</span>
-                                </span>
-                            </div>
+                            <input
+                                type="number"
+                                name="unidadesPorProducto"
+                                value={etapaData.unidadesPorProducto || ''}
+                                onChange={handleChange}
+                                required
+                            />
                         </label>
                         <label>
                             Tiempo de Fabricación de Producto (minutos):
@@ -138,33 +129,23 @@ const FormularioEtapa = () => {
                         </label>
                         <label>
                             Capacidad Máxima de Abastecimiento en Producción:
-                            <div className="input-container">
-                                <input
-                                    type="number"
-                                    name="capacidadMaximaAbastecimientoProduccion"
-                                    value={etapaData.capacidadMaximaAbastecimientoProduccion || ''}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <span className="info-icon">i
-                                    <span className="tooltip">Cantidad máxima de unidades de abastecimiento que puede contener Producción.</span>
-                                </span>
-                            </div>
+                            <input
+                                type="number"
+                                name="capacidadMaximaAbastecimientoProduccion"
+                                value={etapaData.capacidadMaximaAbastecimientoProduccion || ''}
+                                onChange={handleChange}
+                                required
+                            />
                         </label>
                         <label>
                             Capacidad Máxima de Productos en Producción:
-                            <div className="input-container">
-                                <input
-                                    type="number"
-                                    name="capacidadMaximaProductosProduccion"
-                                    value={etapaData.capacidadMaximaProductosProduccion || ''}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <span className="info-icon">i
-                                    <span className="tooltip">Número máximo de productos que Producción puede almacenar.</span>
-                                </span>
-                            </div>
+                            <input
+                                type="number"
+                                name="capacidadMaximaProductosProduccion"
+                                value={etapaData.capacidadMaximaProductosProduccion || ''}
+                                onChange={handleChange}
+                                required
+                            />
                         </label>
                         <label>
                             Periodo entre Expediciones en Producción (minutos):
@@ -183,18 +164,13 @@ const FormularioEtapa = () => {
                     <>
                         <label>
                             Capacidad Máxima de Productos en Almacenamiento:
-                            <div className="input-container">
-                                <input
-                                    type="number"
-                                    name="capacidadMaximaProductosAlmacenamiento"
-                                    value={etapaData.capacidadMaximaProductosAlmacenamiento || ''}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <span className="info-icon">i
-                                    <span className="tooltip">Cantidad máxima de productos que puede contener Almacenamiento.</span>
-                                </span>
-                            </div>
+                            <input
+                                type="number"
+                                name="capacidadMaximaProductosAlmacenamiento"
+                                value={etapaData.capacidadMaximaProductosAlmacenamiento || ''}
+                                onChange={handleChange}
+                                required
+                            />
                         </label>
                         <label>
                             Periodo de Compras (minutos):
@@ -217,17 +193,15 @@ const FormularioEtapa = () => {
         <div className="container">
             <form onSubmit={handleSubmit}>
                 <h2>
-                    Configurar{' '}
                     {tipoAbastecimiento === 2
-                        ? 'Abastecimiento 2'
-                        : tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+                        ? 'Editar Abastecimiento 2'
+                        : 'Editar Abastecimiento'}
                 </h2>
                 {renderFields()}
                 <button type="submit">Guardar Etapa</button>
             </form>
         </div>
     );
-    
 };
 
 export default FormularioEtapa;
