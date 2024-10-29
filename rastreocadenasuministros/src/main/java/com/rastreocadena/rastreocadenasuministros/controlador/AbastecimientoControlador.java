@@ -23,8 +23,8 @@ public class AbastecimientoControlador {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Abastecimiento>> listarAbastecimientos() {
-        List<Abastecimiento> lista = abastecimientoServicio.listarAbastecimientos();
+    public ResponseEntity<List<Abastecimiento>> listarAbastecimientos(@RequestParam(value = "tipoAbastecimiento", required = false) Integer tipoAbastecimiento) {
+        List<Abastecimiento> lista = abastecimientoServicio.listarAbastecimientos(tipoAbastecimiento);
         return ResponseEntity.ok(lista);
     }
 }

@@ -15,6 +15,7 @@ public class Abastecimiento {
     private int capacidadMaximaAbastecimiento;
     private int periodoExpedicionAbastecimiento;
     private int tiempoProduccionAbastecimiento;
+    private int tipoAbastecimiento; // 1 para Abastecimiento 1 y 2 para Abastecimiento 2
 
     // Getters y Setters
 
@@ -48,5 +49,13 @@ public class Abastecimiento {
 
     public void setTiempoProduccionAbastecimiento(int tiempoProduccionAbastecimiento) {
         this.tiempoProduccionAbastecimiento = tiempoProduccionAbastecimiento;
+    }
+
+    public int getTipoAbastecimiento() {
+        return tipoAbastecimiento;
+    }
+
+    public void setTipoAbastecimiento(int tipoAbastecimiento) {
+        this.tipoAbastecimiento = tipoAbastecimiento;
     }
 }

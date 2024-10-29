@@ -1,39 +1,83 @@
+/* Contenedor principal de la barra de navegación */
 .navbar {
     background-color: #333;
+    display: flex;
+    justify-content: space-evenly;
     overflow: hidden;
+    padding: 10px 0; /* Añadir espacio interno para mejorar la visual */
 }
 
+/* Lista de navegación */
 .navbar-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: space-around;
     align-items: center;
+    gap: 100px; /* Espacio entre los elementos */
 }
 
+/* Cada ítem de la barra */
 .navbar-item {
     padding: 10px 20px;
 }
 
-.navbar-link, .navbar-button, .navbar-select {
+/* Enlaces y botones dentro de la barra */
+.navbar-link, 
+.navbar-button, 
+.navbar-select {
     display: block;
+    margin-top: 0px;
+    background-color: #4CAF50;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 12px 16px;
     text-decoration: none;
     border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.navbar-link:hover, .navbar-button:hover, .navbar-select:hover {
+/* Hover para botones y enlaces */
+.navbar-link:hover, 
+.navbar-button:hover, 
+.navbar-select:hover {
     background-color: #111;
 }
 
+/* Estilo específico del select para mantener consistencia */
 .navbar-select {
     background-color: #333;
     color: white;
-    border: none;
-    padding: 14px 16px;
+    border: 1px solid white;
     cursor: pointer;
-    border-radius: 5px;
+}
+
+/* Alineación vertical del select */
+.navbar-select option {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Espacio específico entre el botón 'Volver a Cadena' y 'Inicio' */
+.navbar-item:first-child {
+    margin-right: 10px;
+}
+
+/* Estilo responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+    .navbar-list {
+        flex-direction: column; /* Apilar los elementos verticalmente */
+        align-items: stretch; /* Asegurar que se estiren para ocupar todo el ancho */
+    }
+
+    .navbar-item {
+        width: 100%; /* Cada ítem ocupa todo el ancho */
+        padding: 10px;
+    }
+
+    .navbar-link, .navbar-button, .navbar-select {
+        width: 100%; /* Los botones y select también ocupan todo el ancho */
+    }
 }

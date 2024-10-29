@@ -17,7 +17,13 @@ public class AbastecimientoServicio {
         return abastecimientoRepositorio.save(abastecimiento);
     }
 
-    public List<Abastecimiento> listarAbastecimientos() {
-        return abastecimientoRepositorio.findAll();
+    public List<Abastecimiento> listarAbastecimientos(Integer tipoAbastecimiento) {
+        if (tipoAbastecimiento != null) {
+            // Filtrar por tipo de abastecimiento
+            return abastecimientoRepositorio.findByTipoAbastecimiento(tipoAbastecimiento);
+        } else {
+            // Listar todos los abastecimientos
+            return abastecimientoRepositorio.findAll();
+        }
     }
 }

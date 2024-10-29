@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './FormularioEtapa.css';
@@ -6,61 +6,63 @@ import './FormularioEtapa.css';
 const FormularioEtapa = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { tipo, etapa } = location.state || {};
+    const { tipo, tipoAbastecimiento = 1 } = location.state || {}; // Recibe tipoAbastecimiento desde la navegación
 
     const initialData = {
-        nombre: '',
-        tipo: tipo,
         tiempoProduccionAbastecimiento: '',
-        tiempoFabricacionProducto: '',
         capacidadMaximaAbastecimiento: '',
-        capacidadMaximaAbastecimientoProduccion: '', 
-        capacidadMaximaProductosProduccion: '', 
-        capacidadMaximaProductosAlmacenamiento: '', 
-        periodoExpedicionAbastecimiento: '', 
-        periodoExpedicionProduccion: '', 
+        periodoExpedicionAbastecimiento: '',
+        tiempoFabricacionProducto: '',
         unidadesPorProducto: '',
-        periodoCompras: ''
+        capacidadMaximaAbastecimientoProduccion: '',
+        capacidadMaximaProductosProduccion: '',
+        periodoExpedicionProduccion: '',
+        capacidadMaximaProductosAlmacenamiento: '',
+        periodoCompras: '',
     };
 
-    const [etapaData, setEtapaData] = useState(etapa || initialData);
+    const [etapaData, setEtapaData] = useState(initialData);
 
-    // Función para validar valores negativos y fraccionarios
-    const validarValor = (valor) => {
-        return valor > 0 && Number.isInteger(Number(valor)); // Debe ser un número positivo y entero
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const url =
+                    tipo === 'abastecimiento'
+                        ? `http://localhost:8080/api/abastecimiento/listar?tipoAbastecimiento=${tipoAbastecimiento}`
+                        : `http://localhost:8080/api/${tipo}/listar`;
+
+                const response = await axios.get(url);
+                if (response.data.length > 0) {
+                    setEtapaData(response.data[0]); // Cargar datos existentes
+                }
+            } catch (error) {
+                console.error('Error obteniendo los datos de la etapa:', error);
+            }
+        };
+
+        fetchData();
+    }, [tipo, tipoAbastecimiento]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        if (validarValor(value)) {
-            setEtapaData({ ...etapaData, [name]: value });
-        } else {
-            alert('Por favor ingrese un número entero positivo.');
-        }
+        setEtapaData({ ...etapaData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validar que el tiempo de expedición no sea menor al tiempo de producción
-        if (tipo === 'abastecimiento' && Number(etapaData.periodoExpedicionAbastecimiento) < Number(etapaData.tiempoProduccionAbastecimiento)) {
-            alert('El periodo de expedición no puede ser menor que el tiempo de producción en Abastecimiento.');
-            return;
-        }
-
-        if (tipo === 'produccion' && Number(etapaData.periodoExpedicionProduccion) < Number(etapaData.tiempoFabricacionProducto)) {
-            alert('El periodo de expedición no puede ser menor que el tiempo de producción en Producción.');
-            return;
-        }
-
         try {
-            const response = await axios.post(`http://localhost:8080/api/${tipo}/guardar`, etapaData);
-            alert(`Etapa guardada: ${JSON.stringify(response.data)}`);
-            navigate('/');
+            const url =
+                tipo === 'abastecimiento'
+                    ? `http://localhost:8080/api/abastecimiento/guardar?tipoAbastecimiento=${tipoAbastecimiento}`
+                    : `http://localhost:8080/api/${tipo}/guardar`;
+
+            await axios.post(url, etapaData);
+            alert('Etapa guardada con éxito.');
+            navigate('/cadena');
         } catch (error) {
-            console.error('Error guardando la etapa', error);
-            alert('Error guardando la etapa');
+            console.error('Error guardando la etapa:', error);
+            alert('Error guardando la etapa.');
         }
     };
 
@@ -76,7 +78,6 @@ const FormularioEtapa = () => {
                                 name="tiempoProduccionAbastecimiento"
                                 value={etapaData.tiempoProduccionAbastecimiento || ''}
                                 onChange={handleChange}
-                                placeholder="Ej: 5 minutos"
                                 required
                             />
                         </label>
@@ -102,7 +103,6 @@ const FormularioEtapa = () => {
                                 name="periodoExpedicionAbastecimiento"
                                 value={etapaData.periodoExpedicionAbastecimiento || ''}
                                 onChange={handleChange}
-                                placeholder="Ej: 10 minutos"
                                 required
                             />
                         </label>
@@ -133,7 +133,6 @@ const FormularioEtapa = () => {
                                 name="tiempoFabricacionProducto"
                                 value={etapaData.tiempoFabricacionProducto || ''}
                                 onChange={handleChange}
-                                placeholder="Ej: 5 minutos"
                                 required
                             />
                         </label>
@@ -174,7 +173,6 @@ const FormularioEtapa = () => {
                                 name="periodoExpedicionProduccion"
                                 value={etapaData.periodoExpedicionProduccion || ''}
                                 onChange={handleChange}
-                                placeholder="Ej: 10 minutos"
                                 required
                             />
                         </label>
@@ -205,7 +203,6 @@ const FormularioEtapa = () => {
                                 name="periodoCompras"
                                 value={etapaData.periodoCompras || ''}
                                 onChange={handleChange}
-                                placeholder="Ej: 10 minutos"
                                 required
                             />
                         </label>
@@ -217,12 +214,20 @@ const FormularioEtapa = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Configurar {tipo.charAt(0).toUpperCase() + tipo.slice(1)}</h2>
-            {renderFields()}
-            <button type="submit">Guardar Etapa</button>
-        </form>
+        <div className="container">
+            <form onSubmit={handleSubmit}>
+                <h2>
+                    Configurar{' '}
+                    {tipoAbastecimiento === 2
+                        ? 'Abastecimiento 2'
+                        : tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+                </h2>
+                {renderFields()}
+                <button type="submit">Guardar Etapa</button>
+            </form>
+        </div>
     );
+    
 };
 
 export default FormularioEtapa;

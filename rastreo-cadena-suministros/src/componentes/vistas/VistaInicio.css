@@ -1,0 +1,34 @@
+/* VistaInicio.css */
+.vista-inicio {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; /* La pantalla completa */
+    align-items: stretch; /* Asegura que los botones crezcan verticalmente */
+    justify-content: space-evenly; /* Espaciado uniforme entre columnas */
+    gap: 20px; /* Espacio entre los botones */
+}
+
+.boton-columna {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boton-grande {
+    width: 90%; /* Ancho del botón */
+    height: 80%; /* Aumenta la altura para ocupar más del contenedor */
+    font-size: 28px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10%;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.boton-grande:hover {
+    background-color: #5c5c5c;
+    transform: scale(1.05);
+}
