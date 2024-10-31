@@ -9,29 +9,27 @@ public class EstadoSimulacion {
     private Map<String, Object> produccionCondiciones;
     private Map<String, Object> almacenamientoCondiciones;
 
-    private int unidadesAbastecimientoAba = 0;
-    private int unidadesAbastecimientoAba2 = 0;
-    private int unidadesAbastecimientoProduccion = 0;
-    private int unidadesProductosProd = 0;
-    private int unidadesProductosAlma = 0;
-    private int unidadesEnTransicion = 0;
-    private int unidadesEnTransicion2 = 0;
-    private int productosEnTransicion = 0;
-    private String alertaAbastecimiento;
-    private String alertaAbastecimiento2;
-    private String alertaProduccion;
-    private String alertaAlmacenamiento;
+    private int unidadesAbastecimientoAba;
+    private int unidadesAbastecimientoAba2;
+    private int unidadesAbastecimientoProduccion;
+    private int unidadesProductosProd;
+    private int unidadesProductosAlma;
+    private int unidadesEnTransicion;
+    private int unidadesEnTransicion2;
+    private int productosEnTransicion;
     private int unidadesAbastecimientoGeneradas;
     private int productosGenerados;
     private int productosVendidos;
     private int unidadesAbastecimientoDesechadas;
     private int productosDesechados;
+    private String alertaAbastecimiento;
+    private String alertaAbastecimiento2;
+    private String alertaProduccion;
+    private String alertaAlmacenamiento;
 
-    // Constructor por defecto
     public EstadoSimulacion() {
     }
 
-    // Constructor con parámetro
     public EstadoSimulacion(boolean enEjecucion) {
         this.enEjecucion = enEjecucion;
     }
@@ -117,6 +115,30 @@ public class EstadoSimulacion {
         this.unidadesProductosAlma = unidadesProductosAlma;
     }
 
+    public int getUnidadesEnTransicion() {
+        return unidadesEnTransicion;
+    }
+
+    public void setUnidadesEnTransicion(int unidadesEnTransicion) {
+        this.unidadesEnTransicion = unidadesEnTransicion;
+    }
+
+    public int getUnidadesEnTransicion2() {
+        return unidadesEnTransicion2;
+    }
+
+    public void setUnidadesEnTransicion2(int unidadesEnTransicion2) {
+        this.unidadesEnTransicion2 = unidadesEnTransicion2;
+    }
+
+    public int getProductosEnTransicion() {
+        return productosEnTransicion;
+    }
+
+    public void setProductosEnTransicion(int productosEnTransicion) {
+        this.productosEnTransicion = productosEnTransicion;
+    }
+
     public String getAlertaAbastecimiento() {
         return alertaAbastecimiento;
     }
@@ -147,30 +169,6 @@ public class EstadoSimulacion {
 
     public void setAlertaAlmacenamiento(String alertaAlmacenamiento) {
         this.alertaAlmacenamiento = alertaAlmacenamiento;
-    }
-
-    public int getUnidadesEnTransicion() {
-        return unidadesEnTransicion;
-    }
-
-    public void setUnidadesEnTransicion(int unidadesEnTransicion) {
-        this.unidadesEnTransicion = unidadesEnTransicion;
-    }
-
-    public int getUnidadesEnTransicion2() {
-        return unidadesEnTransicion2;
-    }
-
-    public void setUnidadesEnTransicion2(int unidadesEnTransicion2) {
-        this.unidadesEnTransicion2 = unidadesEnTransicion2;
-    }
-
-    public int getProductosEnTransicion() {
-        return productosEnTransicion;
-    }
-
-    public void setProductosEnTransicion(int productosEnTransicion) {
-        this.productosEnTransicion = productosEnTransicion;
     }
 
     public void incrementarUnidadesAbastecimientoGeneradas() {
@@ -230,7 +228,6 @@ public class EstadoSimulacion {
         this.unidadesAbastecimientoAba = 0;
     }
 
-    // Abastecimiento 2
     public void incrementarUnidadesDeAbastecimientoEnAbastecimiento2() {
         this.unidadesAbastecimientoAba2++;
     }
@@ -248,7 +245,6 @@ public class EstadoSimulacion {
         this.unidadesEnTransicion = 0;
     }
 
-    // Transición de Abastecimiento 2 a Producción
     public void incrementarUnidadesDeAbastecimientoEnTransicion2(int cantidad) {
         this.unidadesEnTransicion2 += cantidad;
     }
@@ -257,7 +253,6 @@ public class EstadoSimulacion {
         this.unidadesEnTransicion2 = 0;
     }
 
-    // Producción
     public void incrementarUnidadesDeAbastecimientoEnProduccion(int cantidad) {
         this.unidadesAbastecimientoProduccion += cantidad;
     }
@@ -273,7 +268,6 @@ public class EstadoSimulacion {
         this.unidadesProductosProd = 0;
     }
 
-    // Transición de Producción a Almacenamiento
     public void incrementarProductosEnTransicion(int cantidad) {
         this.productosEnTransicion += cantidad;
     }
@@ -281,8 +275,6 @@ public class EstadoSimulacion {
     public void expedirProductosTransicionProduccion() {
         this.productosEnTransicion = 0;
     }
-
-    // Almacenamiento
     public void transferirProductosAAlmacenamiento(int cantidad) {
         this.unidadesProductosAlma += cantidad;
     }

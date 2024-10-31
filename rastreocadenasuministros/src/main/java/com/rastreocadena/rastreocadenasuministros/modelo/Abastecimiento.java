@@ -17,8 +17,6 @@ public class Abastecimiento {
     private int tiempoProduccionAbastecimiento;
     private int tipoAbastecimiento; // 1 para Abastecimiento 1 y 2 para Abastecimiento 2
 
-    // Getters y Setters
-
     public Long getId() {
         return id;
     }

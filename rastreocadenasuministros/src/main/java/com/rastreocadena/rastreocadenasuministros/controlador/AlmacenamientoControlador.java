@@ -28,9 +28,4 @@ public class AlmacenamientoControlador {
         return ResponseEntity.ok(almacenamientos);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Almacenamiento> obtenerAlmacenamiento(@PathVariable Long id) {
-        Optional<Almacenamiento> almacenamiento = almacenamientoServicio.obtenerAlmacenamientoPorId(id);
-        return almacenamiento.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
 }

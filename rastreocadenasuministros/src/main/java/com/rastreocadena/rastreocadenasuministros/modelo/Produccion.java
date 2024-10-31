@@ -18,8 +18,6 @@ public class Produccion {
     private int tiempoFabricacionProducto;
     private int periodoExpedicionProduccion;
 
-    // Getters y Setters
-
     public Long getId() {
         return id;
     }
