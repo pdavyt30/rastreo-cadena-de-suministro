@@ -15,8 +15,6 @@ public class Almacenamiento {
     private int capacidadMaximaProductosAlmacenamiento;
     private int periodoCompras;
 
-    // Getters y Setters
-
     public Long getId() {
         return id;
     }
