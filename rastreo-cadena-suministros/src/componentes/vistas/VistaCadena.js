@@ -92,7 +92,7 @@ const VistaCadena = ({ dificultad }) => {
 
   return (
     <div className="cadena-container">
-      <h1 className="cadena-titulo">CADENA DE SUMINISTROS</h1>
+      <h1 className="cadena-titulo">CADENA DE SUMINISTRO</h1>
       <div className="cadena-etapas-container">
         <div className="cadena-etapa" onClick={() => handleButtonClick(1)}>
           <img src={imagenAbastecimiento} alt="Abastecimiento" />

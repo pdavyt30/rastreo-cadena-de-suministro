@@ -1,28 +1,24 @@
-/* Contenedor principal de la barra de navegación */
 .navbar {
     background-color: #333;
     display: flex;
     justify-content: space-evenly;
     overflow: hidden;
-    padding: 10px 0; /* Añadir espacio interno para mejorar la visual */
+    padding: 10px 0;
 }
 
-/* Lista de navegación */
 .navbar-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     align-items: center;
-    gap: 100px; /* Espacio entre los elementos */
+    gap: 100px; 
 }
 
-/* Cada ítem de la barra */
 .navbar-item {
     padding: 10px 20px;
 }
 
-/* Enlaces y botones dentro de la barra */
 .navbar-link, 
 .navbar-button, 
 .navbar-select {
@@ -39,14 +35,15 @@
     transition: background-color 0.3s ease;
 }
 
-/* Hover para botones y enlaces */
 .navbar-link:hover, 
-.navbar-button:hover, 
-.navbar-select:hover {
-    background-color: #111;
+.navbar-button:hover {
+    background-color: #94cc96;
 }
 
-/* Estilo específico del select para mantener consistencia */
+.navbar-select:hover {
+    background-color: #747474;
+}
+
 .navbar-select {
     background-color: #333;
     color: white;
@@ -54,30 +51,27 @@
     cursor: pointer;
 }
 
-/* Alineación vertical del select */
 .navbar-select option {
     background-color: #4CAF50;
     color: white;
 }
 
-/* Espacio específico entre el botón 'Volver a Cadena' y 'Inicio' */
 .navbar-item:first-child {
     margin-right: 10px;
 }
 
-/* Estilo responsivo para pantallas pequeñas */
 @media (max-width: 600px) {
     .navbar-list {
-        flex-direction: column; /* Apilar los elementos verticalmente */
-        align-items: stretch; /* Asegurar que se estiren para ocupar todo el ancho */
+        flex-direction: column; 
+        align-items: stretch; 
     }
 
     .navbar-item {
-        width: 100%; /* Cada ítem ocupa todo el ancho */
+        width: 100%; 
         padding: 10px;
     }
 
     .navbar-link, .navbar-button, .navbar-select {
-        width: 100%; /* Los botones y select también ocupan todo el ancho */
+        width: 100%;
     }
 }

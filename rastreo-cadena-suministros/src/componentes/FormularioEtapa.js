@@ -6,7 +6,7 @@ import './FormularioEtapa.css';
 const FormularioEtapa = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { tipo, tipoAbastecimiento } = location.state || {}; // Recibe tipo y tipoAbastecimiento correctamente
+    const { tipo, tipoAbastecimiento } = location.state || {}; 
 
     const initialData = {
         tiempoProduccionAbastecimiento: '',
@@ -19,7 +19,7 @@ const FormularioEtapa = () => {
         periodoExpedicionProduccion: '',
         capacidadMaximaProductosAlmacenamiento: '',
         periodoCompras: '',
-        tipoAbastecimiento, // Asignamos tipoAbastecimiento desde el estado
+        tipoAbastecimiento, 
     };
 
     const [etapaData, setEtapaData] = useState(initialData);
@@ -34,7 +34,7 @@ const FormularioEtapa = () => {
 
                 const response = await axios.get(url);
                 if (response.data.length > 0) {
-                    setEtapaData(response.data[0]); // Carga los datos existentes correctamente
+                    setEtapaData(response.data[0]);
                 }
             } catch (error) {
                 console.error('Error obteniendo los datos de la etapa:', error);
@@ -192,11 +192,15 @@ const FormularioEtapa = () => {
     return (
         <div className="container">
             <form onSubmit={handleSubmit}>
-                <h2>
-                    {tipoAbastecimiento === 2
-                        ? 'Editar Abastecimiento 2'
-                        : 'Editar Abastecimiento'}
-                </h2>
+            <h2>
+                {tipo === 'abastecimiento' && tipoAbastecimiento === 2
+                    ? 'Editar Abastecimiento 2'
+                    : tipo === 'abastecimiento'
+                    ? 'Editar Abastecimiento'
+                    : tipo === 'produccion'
+                    ? 'Editar Producción'
+                    : 'Editar Almacenamiento'}
+            </h2>
                 {renderFields()}
                 <button type="submit">Guardar Etapa</button>
             </form>

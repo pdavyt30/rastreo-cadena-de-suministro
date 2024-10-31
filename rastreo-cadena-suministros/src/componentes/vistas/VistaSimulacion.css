@@ -1,11 +1,17 @@
+#root {
+    height: 100%;
+}
+
 .simulacion-contenedor-principal {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    justify-content: center;
     background-color: #0f1b2b;
     height: 100%;
+    padding-bottom: 280px;
 }
 
 .simulacion-titulo-principiante {
@@ -29,25 +35,25 @@
 .simulacion-container {
     display: flex;
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
 }
 
 .simulacion-contenedor-abastecimientos {
-    width: 35%;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    width: 43%;
+    gap: 16px;
 }
 
 .simulacion-fila {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 16px;
+    margin-right: 16px;
 }
 
-/* Etapas de Abastecimiento */
 .abastecimiento-etapa-principiante {
     min-height: 330px;
     width: 270px;
@@ -82,7 +88,6 @@
     flex-shrink: 0;
 }
 
-/* Etapa de Producción */
 .produccion-etapa {
     width: 290px;
     background-image: url('../../imagenes/imagenSimulacionProduccion.png');
@@ -99,7 +104,6 @@
     flex-shrink: 0;
 }
 
-/* Etapa de Almacenamiento */
 .almacenamiento-etapa {
     width: 270px;
     background-image: url('../../imagenes/imagenSimulacionAlmacenamiento.png');
@@ -117,12 +121,12 @@
 }
 
 .simulacion-contenedor-produccion-almacenamiento {
-    width: 60%;
     display: flex;
+    width: 57%;
     justify-content: space-between;
     align-items: stretch;
-    gap: 10px;
     height: 330px;
+    gap: 16px
 }
 
 .simulacion-contenido-etapa {
@@ -134,7 +138,7 @@
 }
 
 .simulacion-transicion-vertical {
-    width: 30%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -145,25 +149,39 @@
 
 .simulacion-transicion {
     display: flex;
-    width: 50%;
+    width: 100%;
     justify-content: center;
     flex-direction: column;
     color: #f2f2f2;
-
     align-items: center;
+    height: 100%;
+}
+
+@keyframes cinta-transportadora {
+    from {
+      transform: translateX(0%);
+    }
+  
+    to {
+      transform: translateX(calc(100% - 40px));
+    }
 }
 
 .simulacion-contenido-transicion {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2px;
-    max-width: 50%;
-    min-width: 50%;
+    justify-content: start;
+    align-items: flex-end;
+    width: 100%;
+    height: 76px;
+
+
+    .animacion-unidad-transicion {
+        width: 100%;
+        animation: cinta-transportadora 10s linear infinite;
+    }
 }
 
-/* Unidades de Abastecimiento */
 .simulacion-unidad-abastecimiento {
     width: 40px;
     height: 40px;
@@ -172,11 +190,10 @@
     background-image: url('../../imagenes/imagenSimulacionUnidadAbastecimiento.png');
     background-size: contain;
     background-repeat: no-repeat;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombra para destacarlas */
-    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+    background-color: rgba(255, 255, 255, 0.9); 
 }
 
-/* Productos */
 .simulacion-unidad-produccion {
     width: 40px;
     height: 40px;
@@ -185,15 +202,31 @@
     background-image: url('../../imagenes/imagenSimulacionProducto.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-color:rgba(255, 255, 255, 0.9);/* Fondo blanco semitransparente */
+    background-color:rgba(255, 255, 255, 0.9);
 }
 
+.simulacion-transicion-abastecimiento {
+    width: 50px;
+    height: 50px;
+    background-image: url('../../imagenes/imagenTransicionAbastecimientoAProduccion.png');
+    background-size: contain;
+    background-color: transparent
+}
+
+.simulacion-transicion-produccion {
+    width: 50px;
+    height: 50px;
+    background-image: url('../../imagenes/imagenTransicionProduccionAAlmacenamiento.png');
+    background-size: contain;
+    background-color: transparent
+}
 
 .simulacion-button-container-principiante {
     margin-top: 20px;
     display: flex;
     justify-content: center;
     gap: 15px;
+    width: 100%;
 }
 
 .simulacion-button-container-avanzado {
@@ -201,6 +234,7 @@
     display: flex;
     justify-content: center;
     gap: 15px;
+    width: 100%;
 }
 
 .simulacion-stop-button,
@@ -210,6 +244,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 170px;
 }
 
 .simulacion-stop-button {
@@ -243,13 +278,23 @@
     font-size: 12px;
     align-content: center;
     font-weight: 700;
-    color: #ff0800;
+    color: white;
     margin-top: auto;
     background-color: rgb(63, 62, 62,80%);
     padding: 8px;
 }
 
-/* Media queries para pantallas más pequeñas */
+.cinta-transicion {
+    border-top: 6px solid white;
+    width: 100%;
+    margin-bottom: 0px
+}
+
+.inactiva {
+    margin-bottom: 18px;
+}
+
+
 @media (max-width: 768px) {
     .simulacion-container {
         flex-direction: column;

@@ -1,60 +1,54 @@
-/* Mantener el body y el html ocupando toda la pantalla */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0; /* Fondo claro */
+    background-color: #f0f0f0;
     display: flex;
     flex-direction: column;
 }
 
-/* Contenedor principal para la vista */
 .container {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px; /* Espacio alrededor del formulario */
+    padding: 20px; 
     box-sizing: border-box;
     max-height: 550px;
 }
 
-/* Estilos del formulario */
 form {
+    margin-top: 5%;
     background-color: #f9f9f9;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Usar el 100% del ancho disponible dentro del contenedor */
-    max-width: 400px; /* Límite máximo de ancho */
-    max-height: 70vh; /* Limitar la altura al 80% de la pantalla */
-    overflow-y:visible; /* Agregar scroll si es necesario */
+    width: 100%; 
+    max-width: 400px; 
+    max-height: 70vh; 
+    overflow-y:visible; 
     overflow-x: hidden;
 }
 
-/* Ajuste del título */
 h2 {
     margin-bottom: 20px;
     color: #333;
     text-align: center;
 }
 
-/* Estilos para las etiquetas */
 label {
     display: block;
     margin-bottom: 10px;
     color: #555;
 }
 
-/* Estilo del contenedor con ícono */
 .input-container {
     position: relative;
 }
 
-/* Estilo para los inputs */
 input[type="text"],
 input[type="number"] {
-    width: 100%; /* Ajustar el ancho al contenedor */
+    width: 100%;
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 15px;
@@ -63,7 +57,6 @@ input[type="number"] {
     box-sizing: border-box;
 }
 
-/* Estilo del botón */
 button {
     width: 100%;
     padding: 12px;
@@ -77,10 +70,9 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #bed8bf;
 }
 
-/* Estilo del ícono de información */
 .info-icon {
     position: absolute;
     top: 40%;
@@ -97,7 +89,6 @@ button:hover {
     line-height: 16px;
 }
 
-/* Tooltip del ícono */
 .tooltip {
     visibility: hidden;
     background-color: #555;

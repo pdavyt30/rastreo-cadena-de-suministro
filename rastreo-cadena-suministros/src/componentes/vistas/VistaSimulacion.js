@@ -89,11 +89,14 @@ const VistaSimulacion = () => {
                         </section>
                         <div className="simulacion-transicion">
                             <div className="simulacion-contenido-transicion">
-                                {Array.from({ length: estado.unidadesEnTransicion || 0 }).map((_, idx) => (
-                                    <div key={idx} className="simulacion-unidad-abastecimiento"></div>
-                                ))}
-                            </div>
-                            <h3>----------------------------</h3>
+                                {estado.unidadesEnTransicion > 0 && 
+                                <div className="animacion-unidad-transicion">
+                                    <div className="simulacion-transicion-abastecimiento" />
+                                </div>}
+                                <div className={`cinta-transicion ${estado.unidadesEnTransicion > 0 ? '' : 'inactiva'}`}></div>
+                                {estado.unidadesEnTransicion > 0 &&
+                                <a className='contador-unidades-en-transicion'>Unidades en transicion: {estado.unidadesEnTransicion}</a>}
+                            </div>                            
                         </div>
                     </div>
 
@@ -111,13 +114,16 @@ const VistaSimulacion = () => {
                                 )}
                             </section>
                             <div className="simulacion-transicion">
-                                <div className="simulacion-contenido-transicion">
-                                    {Array.from({ length: estado.unidadesEnTransicion2 || 0 }).map((_, idx) => (
-                                        <div key={idx} className="simulacion-unidad-abastecimiento"></div>
-                                    ))}
-                                </div>
-                                <h3>----------------------------</h3>
-                            </div>
+                            <div className="simulacion-contenido-transicion">
+                                {estado.unidadesEnTransicion2 > 0 && 
+                                <div className="animacion-unidad-transicion">
+                                    <div className="simulacion-transicion-abastecimiento" />
+                                </div>}
+                                <div className={`cinta-transicion ${estado.unidadesEnTransicion > 0 ? '' : 'inactiva'}`}></div>
+                                {estado.unidadesEnTransicion2 > 0 && 
+                                <a className='contador-unidades-en-transicion'>Unidades en transicion: {estado.unidadesEnTransicion2}</a>}
+                            </div>                            
+                        </div>
                         </div>
                     )}
                 </div>
@@ -139,12 +145,15 @@ const VistaSimulacion = () => {
                     </article>
 
                     <div className="simulacion-transicion-vertical">
-                        <div className="simulacion-contenido-transicion">
-                            {Array.from({ length: estado.productosEnTransicion || 0 }).map((_, idx) => (
-                                <div key={idx} className="simulacion-unidad-produccion"></div>
-                            ))}
+                    <div className="simulacion-contenido-transicion">
+                            {estado.productosEnTransicion > 0 && 
+                            <div className="animacion-unidad-transicion">
+                                <div className="simulacion-transicion-produccion" />
+                            </div>}
+                            <div className={`cinta-transicion ${estado.productosEnTransicion > 0 ? '' : 'inactiva'}`}></div>
+                            {estado.productosEnTransicion > 0 && 
+                            <a className='contador-unidades-en-transicion'>Productos en transicion: {estado.productosEnTransicion}</a>}
                         </div>
-                        <h3>---------------------------------</h3>
                     </div>
 
                     <article className="almacenamiento-etapa">

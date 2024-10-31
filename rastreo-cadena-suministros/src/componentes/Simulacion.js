@@ -20,7 +20,6 @@ const Simulacion = () => {
     return (
         <div className="simulacion-container">
             <h1>Simulación en Ejecución</h1>
-            {/* Aquí se puede agregar la visualización de la simulación */}
             <button className="stop-button" onClick={detenerSimulacion}>
                 Detener Simulación
             </button>

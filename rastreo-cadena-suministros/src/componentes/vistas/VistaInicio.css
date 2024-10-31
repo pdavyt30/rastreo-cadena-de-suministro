@@ -1,11 +1,46 @@
-/* VistaInicio.css */
+.contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #0f1b2b;
+    padding: 24px;
+}
+
+.header-inicio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 50px; 
+    img {
+        border-radius: 8px;
+        position: absolute;
+        left: 24px;
+        top: 24px;
+    }
+}
+
+.logo-imagen {
+    width: 80px;
+    height: 80px;
+}
+
+.titulo {
+    color: white;
+    font-size: 36px;
+    margin: 0;
+}
+
+
 .vista-inicio {
     display: flex;
-    flex-direction: row;
-    height: 100vh; /* La pantalla completa */
-    align-items: stretch; /* Asegura que los botones crezcan verticalmente */
-    justify-content: space-evenly; /* Espaciado uniforme entre columnas */
-    gap: 20px; /* Espacio entre los botones */
+    flex-direction: row; 
+    justify-content: space-evenly;
+    align-items: center;
+    width: 80%; 
+    gap: 30px;
+    margin-top: 50px; 
 }
 
 .boton-columna {
@@ -16,19 +51,19 @@
 }
 
 .boton-grande {
-    width: 90%; /* Ancho del botón */
-    height: 80%; /* Aumenta la altura para ocupar más del contenedor */
-    font-size: 28px;
+    width: 240px; 
+    height: 240px; 
+    font-size: 24px;
     cursor: pointer;
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 10%;
+    border-radius: 15px; 
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s, background-color 0.2s;
 }
 
 .boton-grande:hover {
-    background-color: #5c5c5c;
+    background-color: #94cc96;
     transform: scale(1.05);
 }

@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo más oscuro */
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,17 +14,16 @@
 .modal-content {
     background: white;
     border-radius: 16px;
-    padding: 40px;
-    width: 70%; /* Ajuste del ancho */
+    padding: 24px;
+    width: 70%; 
     max-height: 85vh;
     overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     position: relative;
     display: flex;
     flex-direction: column;
 }
 
-/* Estilos comunes del header */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -43,7 +42,6 @@
     flex-grow: 1;
 }
 
-/* Botón de cierre */
 .close-button {
     background: none;
     border: none;
@@ -55,23 +53,22 @@
     align-self: flex-start;
     padding: 0;
     margin: 0;
-    width: 10%;
+    width: 30px;
+    height: 30px;
 }
 
 .close-button:hover {
     color: #333;
 }
 
-/* Estilo del cuerpo del modal */
 .modal-body {
     line-height: 1.8;
-    font-size: 12px;
+    font-size: 16px;
     font-family: 'Open Sans', sans-serif;
     color: #333;
     text-align: justify;
 }
 
-/* Estilos específicos para Información */
 .modal-informacion .modal-body {
     column-count: 2;
     column-gap: 30px;
@@ -94,7 +91,6 @@
     margin-bottom: 16px;
 }
 
-/* Estilos adicionales para el modal de Tutorial */
 .modal-tutorial .tutorial-images {
     display: flex;
     justify-content: space-around;
@@ -102,13 +98,12 @@
 }
 
 .modal-tutorial .tutorial-image {
-    width: 45%; /* Ajusta el ancho de las imágenes */
+    width: 45%; 
     height: auto;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Elimina bordes al hacer foco en los botones */
 button:focus {
     outline: none;
 }

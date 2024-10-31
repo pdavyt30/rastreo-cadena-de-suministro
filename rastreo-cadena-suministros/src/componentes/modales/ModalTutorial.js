@@ -1,7 +1,7 @@
 import React from 'react';
 import './Modal.css';
-import imagen1 from '../../imagenes/imagen 1.png'; // Ruta correcta
-import imagen2 from '../../imagenes/imagen2.png'; // Segunda imagen
+import imagen1 from '../../imagenes/imagen 1.png'; 
+import imagen2 from '../../imagenes/imagen2.png';
 
 const ModalTutorial = ({ isOpen, onClose }) => {
   if (!isOpen) return null;

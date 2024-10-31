@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './BarraNavegacion.css';
 
 const BarraNavegacion = ({ setDificultad, abrirModal }) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [dificultadSeleccionada, setDificultadSeleccionada] = useState(
         localStorage.getItem('dificultad') || 'principiante'
     );
 
     useEffect(() => {
-        setDificultad(dificultadSeleccionada); // Sincroniza con el estado principal
+        setDificultad(dificultadSeleccionada); 
     }, [dificultadSeleccionada, setDificultad]);
 
     const handleSelectChange = (e) => {
         const selectedDifficulty = e.target.value;
-        setDificultadSeleccionada(selectedDifficulty); // Sincroniza con el estado local
-        localStorage.setItem('dificultad', selectedDifficulty); // Guarda en localStorage
-        setDificultad(selectedDifficulty); // Propaga el cambio
+    
+        const confirmChange = window.confirm(
+            `¿Estás seguro de cambiar la dificultad a "${selectedDifficulty}"? Esto reiniciará la configuración.`
+        );
+    
+        if (confirmChange) {
+            setDificultadSeleccionada(selectedDifficulty);
+            localStorage.setItem('dificultad', selectedDifficulty);
+            setDificultad(selectedDifficulty);
+            navigate('/cadena');
+        }
     };
 
     return (
         <nav className="navbar">
             <ul className="navbar-list">
-                {location.pathname === '/configurar-etapa' && (
+                {(location.pathname === '/configurar-etapa' || location.pathname === '/simulacion') && (
                     <li className="navbar-item">
                         <Link to="/cadena" className="navbar-link">Volver a Cadena</Link>
                     </li>
