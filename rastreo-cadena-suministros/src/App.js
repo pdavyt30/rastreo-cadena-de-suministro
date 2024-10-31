@@ -5,8 +5,8 @@ import VistaInicio from './componentes/vistas/VistaInicio';
 import VistaCadena from './componentes/vistas/VistaCadena';
 import FormularioEtapa from './componentes/FormularioEtapa';
 import VistaSimulacion from './componentes/vistas/VistaSimulacion';
-import ModalInformacion from './componentes/modales/ModalInformacion'; // Importamos el modal
-import ModalTutorial from './componentes/modales/ModalTutorial'; // Importamos el modal
+import ModalInformacion from './componentes/modales/ModalInformacion';
+import ModalTutorial from './componentes/modales/ModalTutorial'; 
 import axios from 'axios';
 
 const App = () => {
@@ -30,18 +30,17 @@ const App = () => {
     }, []);
 
     return (
-        <Router>
-            <Rutas 
-                setDificultad={setDificultad} 
-                dificultad={dificultad} 
-                enEjecucion={enEjecucion}
-                abrirModal={abrirModal} 
-            />
-
-            {/* Modales */}
+<Router basename="/">
+    <Rutas 
+        setDificultad={setDificultad} 
+        dificultad={dificultad} 
+        enEjecucion={enEjecucion}
+        abrirModal={abrirModal} 
+    />
             <ModalInformacion isOpen={modalActivo === 'informacion'} onClose={cerrarModal} />
             <ModalTutorial isOpen={modalActivo === 'tutorial'} onClose={cerrarModal} />
-        </Router>
+</Router>
+
     );
 };
 
